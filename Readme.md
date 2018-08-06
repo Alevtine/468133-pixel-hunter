@@ -1,7 +1,7 @@
 # Личный проект «Пиксель хантер» [![Build status][travis-image]][travis-url]
 
 * Студент: [alevtine](https://up.htmlacademy.ru/ecmascript/6/user/468133).
-* Наставник: `Неизвестно`.
+* Наставник: `Дмитрий Донецкий`: https://github.com/Donnyyyyy
 
 ---
 
