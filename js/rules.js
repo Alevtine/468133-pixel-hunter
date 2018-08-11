@@ -1,6 +1,8 @@
-import { getFromTemplate, makeScreenActive } from './util.js';
+import {getFromTemplate, makeScreenActive} from './util.js';
+import insertGuessForEach from './guessForEach.js';
+import insertGreeting from './greeting.js';
 
-export default function insertGreeting() {
+export default function insertRules() {
   const node = getFromTemplate(`
     <header class="header">
       <button class="back">
@@ -34,14 +36,22 @@ export default function insertGreeting() {
   const continueButton = node.querySelector(`.rules__button`);
   const formInput = node.querySelector(`.rules__input`);
 
-formInput.onchange = () => {
-  formInput.value.length === 0 || formInput.value === '' ? continueButton.disabled = true : continueButton.disabled = false;
-}
+  formInput.oninput = () => {
+    if (formInput.value.length === 0 || formInput.value.trim().length <= 0) {
+      continueButton.disabled = true;
+    } else {
+      continueButton.disabled = false;
+    }
+  };
 
   continueButton.addEventListener(`click`, () => {
     makeScreenActive(insertGuessForEach());
   });
 
-  return node;
+  const backButton = node.querySelector(`button.back`);
+  backButton.addEventListener(`click`, () => {
+    makeScreenActive(insertGreeting());
+  });
 
+  return node;
 }
