@@ -1,4 +1,4 @@
-import {getFromTemplate, makeScreenActive} from './util.js';
+import {getFromTemplate, makeScreenActive} from '../util.js';
 import insertStats from './stats.js';
 import insertGreeting from './greeting.js';
 

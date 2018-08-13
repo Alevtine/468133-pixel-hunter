@@ -1,4 +1,4 @@
-import {getFromTemplate, makeScreenActive} from './util.js';
+import {getFromTemplate, makeScreenActive} from '../util.js';
 import insertGuessForEach from './guessForEach.js';
 import insertGreeting from './greeting.js';
 

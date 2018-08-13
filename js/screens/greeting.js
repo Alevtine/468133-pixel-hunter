@@ -1,4 +1,4 @@
-import {getFromTemplate, makeScreenActive} from './util.js';
+import {getFromTemplate, makeScreenActive} from '../util.js';
 import insertRules from './rules.js';
 
 export default function insertGreeting() {
