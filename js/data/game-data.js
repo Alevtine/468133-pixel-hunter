@@ -1,27 +1,6 @@
-const levels = {
-  min: 1,
-  max: 10
-};
-
-
-export const turnLevel = (level) => {
-  if (level <= levels.min) {
-    return levels.min;
-  }
-  if (level >= levels.max) {
-    return levels.max;
-  }
-
-  return level;
-};
-
-export const calculateLives = (current, answer) => {
-  let result = current - !answer;
-  return result;
-};
-
-// Если игрок ответил меньше, чем на 10 вопросов, то игра считается не пройденной и функция должна вернуть -1;
-// Если игрок ответил на все вопросы и не быстро, и не медленно, и у него остались все жизни, то функция должна вернуть 1150 очков;
+const ANSWERS_QTTY = 10;
+const LIVES_QTTY = 3;
+const TIMER_SEC = 30;
 
 const Point = {
   correct: 100, // Правильный ответ: === 100 очков;
@@ -36,8 +15,24 @@ const Answer = {
   default: `default`
 };
 
+const levels = {
+  min: 1,
+  max: 10
+};
+
+
+export const turnLevel = (level) => {
+  level = Math.min(levels.max, Math.max(levels.min, level));
+  return level;
+};
+
+export const calculateLives = (current, answer) => {
+  return current - !answer;
+};
+
+
 export const getScore = (answersArr, lives) => {
-  if (answersArr.length < 10) {
+  if (answersArr.length < ANSWERS_QTTY || lives > LIVES_QTTY || lives <= 0) {
     return -1;
   } else {
     let scores = lives * Point.bonus;
@@ -58,24 +53,11 @@ export const getScore = (answersArr, lives) => {
   }
 };
 
-// const defineAnswerType = (time, correctness) => {
-//   let answersArr = [];
-//     if (time === Timer.slow & correctness === Answer.correctness[1]) {
-//       answersArr.push('slow')
-//     }
-// }
-
-// let answersArr = ['slow', 'fast', 'slow', 'fast', 'slow', 'fast', 'slow', 'fast', 'slow', 'fast']
-
-// const Timer = {
-//   fast: 5,
-//   slow: 15,
-//   begin: 30
-// };
-//
-// const initialState = {
-//   lives: 3,
-//   level: 1,
-//   time: 30,
-//   score: 0,
-// };
+export const startTimer = (value) => {
+  if (value > 0 && value <= TIMER_SEC) {
+    value--;
+  } else if (value <= 0) {
+    return `Time is out`;
+  }
+  return value;
+};
