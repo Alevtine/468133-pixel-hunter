@@ -1,3 +1,4 @@
+
 const ANSWERS_QTTY = 10;
 const LIVES_QTTY = 3;
 const TIMER_SEC = 30;
