@@ -24,11 +24,11 @@ export const QuestionScreen = [
     title: `Угадайте для каждого изображения фото или рисунок?`,
     answers: [
       {
-        pictureURL: ``,
+        pictureURL: `http://placehold.it/468x458`,
         type: `paint`
       },
       {
-        pictureURL: ``,
+        pictureURL: `http://placehold.it/468x458`,
         type: `photo`
       }
     ]
@@ -38,7 +38,7 @@ export const QuestionScreen = [
     title: `Угадай, фото или рисунок?`,
     answers: [
       {
-        pictureURL: ``,
+        pictureURL: `http://placehold.it/705x455`,
         type: `paint`
       }
     ]
@@ -48,15 +48,15 @@ export const QuestionScreen = [
     title: `Найдите рисунок среди изображений`,
     answers: [
       {
-        pictureURL: ``,
+        pictureURL: `http://placehold.it/304x455`,
         type: `piant`
       },
       {
-        pictureURL: ``,
+        pictureURL: `http://placehold.it/304x455`,
         type: `photo`
       },
       {
-        pictureURL: ``,
+        pictureURL: `http://placehold.it/304x455`,
         type: `photo`
       }
     ]

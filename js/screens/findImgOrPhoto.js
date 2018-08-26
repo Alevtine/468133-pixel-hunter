@@ -5,21 +5,21 @@ import header from '../header.js';
 import statsResult from '../stats-result.js';
 import * as data from '../data/data.js';
 
+const answerFill = `
+${data.QuestionScreen[2][`answers`].map((it, i) =>
+    `<div class="game__option">
+  <img src="${it.pictureURL}" alt="Option ${i + 1}" width="304" height="455">
+</div>`).join(``)}
+`;
+
+
 export default function insertFindImgOrPhoto() {
   const node = getFromTemplate(`
     ${header(data.beginState)}
   <section class="game">
-    <p class="game__task">Найдите рисунок среди изображений</p>
+    <p class="game__task">${data.QuestionScreen[2][`title`]}</p>
     <form class="game__content  game__content--triple">
-      <div class="game__option">
-        <img src="http://placehold.it/304x455" alt="Option 1" width="304" height="455">
-      </div>
-      <div class="game__option  game__option--selected">
-        <img src="http://placehold.it/304x455" alt="Option 2" width="304" height="455">
-      </div>
-      <div class="game__option">
-        <img src="http://placehold.it/304x455" alt="Option 3" width="304" height="455">
-      </div>
+${answerFill}
     </form>
     <ul class="stats">
 ${statsResult(data.stat)}
