@@ -14,6 +14,10 @@ export const Answer = {
   wrong: `wrong`
 };
 
+export const stat = new Map([[1, `wrong`], [2, `fast`], [3, `slow`],
+  [4, `unknown`], [5, `wrong`], [6, `fast`], [7, `slow`], [8, `unknown`],
+  [9, `wrong`], [10, `fast`]]);
+
 export const QuestionScreen = [
   {
     kind: `guessForEach`,

@@ -2,7 +2,9 @@ import {getFromTemplate, makeScreenActive} from '../util.js';
 import insertGuessForOne from './guessForOne.js';
 import insertGreeting from './greeting.js';
 import header from '../header.js';
+import statsResult from '../stats-result.js';
 import * as data from '../data/data.js';
+
 
 export default function insertGuessForEach() {
 
@@ -10,6 +12,7 @@ export default function insertGuessForEach() {
     ${header(data.beginState)}
     <section class="game">
       <p class="game__task">Угадайте для каждого изображения фото или рисунок?</p>
+
       <form class="game__content">
         <div class="game__option">
           <img src="http://placehold.it/468x458" alt="Option 1" width="468" height="458">
@@ -34,17 +37,9 @@ export default function insertGuessForEach() {
           </label>
         </div>
       </form>
+
       <ul class="stats">
-        <li class="stats__result stats__result--wrong"></li>
-        <li class="stats__result stats__result--slow"></li>
-        <li class="stats__result stats__result--fast"></li>
-        <li class="stats__result stats__result--correct"></li>
-        <li class="stats__result stats__result--unknown"></li>
-        <li class="stats__result stats__result--unknown"></li>
-        <li class="stats__result stats__result--unknown"></li>
-        <li class="stats__result stats__result--unknown"></li>
-        <li class="stats__result stats__result--unknown"></li>
-        <li class="stats__result stats__result--unknown"></li>
+${statsResult(data.stat)}
       </ul>
     </section>`);
 

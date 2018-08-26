@@ -2,6 +2,7 @@ import {getFromTemplate, makeScreenActive} from '../util.js';
 import insertFindImgOrPhoto from './findImgOrPhoto';
 import insertGreeting from './greeting.js';
 import header from '../header.js';
+import statsResult from '../stats-result.js';
 import * as data from '../data/data.js';
 
 export default function insertGuessForOne() {
@@ -23,16 +24,7 @@ export default function insertGuessForOne() {
         </div>
       </form>
       <ul class="stats">
-        <li class="stats__result stats__result--wrong"></li>
-        <li class="stats__result stats__result--slow"></li>
-        <li class="stats__result stats__result--fast"></li>
-        <li class="stats__result stats__result--correct"></li>
-        <li class="stats__result stats__result--wrong"></li>
-        <li class="stats__result stats__result--unknown"></li>
-        <li class="stats__result stats__result--slow"></li>
-        <li class="stats__result stats__result--unknown"></li>
-        <li class="stats__result stats__result--fast"></li>
-        <li class="stats__result stats__result--unknown"></li>
+${statsResult(data.stat)}
       </ul>
     </section>`);
 
