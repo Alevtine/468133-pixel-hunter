@@ -1,9 +1,11 @@
-export const beginState = {
+
+export const beginState = Object.freeze({
   level: 1,
   lives: 3,
   time: 30,
   answers: [],
-};
+});
+
 
 export const Answer = {
   right: [`slow`, `fast`],
@@ -12,7 +14,7 @@ export const Answer = {
 
 export const stat = new Map([[1, `wrong`], [2, `fast`], [3, `slow`],
   [4, `unknown`], [5, `wrong`], [6, `fast`], [7, `slow`], [8, `unknown`],
-  [9, `wrong`], [10, `fast`]]);
+  [9, `correct`], [10, `correct`]]);
 
 export const QuestionScreen = [
   {
@@ -45,7 +47,7 @@ export const QuestionScreen = [
     answers: [
       {
         pictureURL: `http://placehold.it/304x455`,
-        type: `piant`
+        type: `paint`
       },
       {
         pictureURL: `http://placehold.it/304x455`,

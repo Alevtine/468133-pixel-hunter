@@ -1,9 +1,8 @@
-
-const ANSWERS_QTTY = 10;
-const LIVES_QTTY = 3;
+export const ANSWERS_QTTY = 10;
+export const LIVES_QTTY = 3;
 const TIMER_SEC = 30;
 
-const Point = {
+export const Point = {
   correct: 100, // Правильный ответ: === 100 очков;
   slow: -50, // Медленный ответ: снимается 50 очков; === 50
   fast: 50, // Быстрый ответ: добавляется 50 очков; === 150
@@ -13,7 +12,9 @@ const Point = {
 const Answer = {
   slow: `slow`,
   fast: `fast`,
-  default: `default`
+  correct: `correct`,
+  wrong: `wrong`,
+  unknown: `unknown`
 };
 
 const levels = {
@@ -45,7 +46,7 @@ export const getScore = (answersArr, lives) => {
         case Answer.fast:
           scores += Point.correct + Point.fast;
           break;
-        case Answer.default:
+        case Answer.correct:
           scores += Point.correct;
           break;
       }

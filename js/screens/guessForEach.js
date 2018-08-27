@@ -1,10 +1,11 @@
 import {getFromTemplate, makeScreenActive} from '../util.js';
 import insertGuessForOne from './guessForOne.js';
 import insertGreeting from './greeting.js';
+import insertStats from './stats.js';
 import header from '../header.js';
 import statsResult from '../stats-result.js';
+import * as gameData from '../data/game-data.js';
 import * as data from '../data/data.js';
-
 
 const answerFill = `
 ${data.QuestionScreen[0][`answers`].map((it, i) =>
@@ -36,9 +37,15 @@ ${statsResult(data.stat)}
     </section>`);
 
   const gameForm = node.querySelector(`.game__content`);
+
   gameForm.addEventListener(`change`, () => {
     if (gameForm.querySelector(`input[name="question1"]:checked`) && gameForm.querySelector(`input[name="question2"]:checked`)) {
-      makeScreenActive(insertGuessForOne());
+      data.beginState.answers.push(`correct`);
+      if (data.beginState.answers.length === gameData.ANSWERS_QTTY || data.beginState.lives === 0) {
+        makeScreenActive(insertStats());
+      } else {
+        makeScreenActive(insertGuessForOne());
+      }
     }
   });
 

@@ -1,8 +1,10 @@
 import {getFromTemplate, makeScreenActive} from '../util.js';
 import insertFindImgOrPhoto from './findImgOrPhoto';
 import insertGreeting from './greeting.js';
+import insertStats from './stats.js';
 import header from '../header.js';
 import statsResult from '../stats-result.js';
+import * as gameData from '../data/game-data.js';
 import * as data from '../data/data.js';
 
 
@@ -39,13 +41,20 @@ ${statsResult(data.stat)}
 
   const gameForm = node.querySelector(`.game__content`);
   const answers = gameForm.querySelectorAll(`.game__answer`);
+
   gameForm.addEventListener(`change`, () => {
+    data.beginState.answers.push(`fast`);
     answers.forEach((item) => {
       if (item.querySelector(`input:checked`)) {
-        makeScreenActive(insertFindImgOrPhoto());
+        if (data.beginState.answers.length === gameData.ANSWERS_QTTY || data.beginState.lives === 0) {
+          makeScreenActive(insertStats());
+        } else {
+          makeScreenActive(insertFindImgOrPhoto());
+        }
       }
     });
   });
+
 
   const backButton = node.querySelector(`button.back`);
   backButton.addEventListener(`click`, () => {

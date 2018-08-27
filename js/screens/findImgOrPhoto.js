@@ -1,8 +1,10 @@
 import {getFromTemplate, makeScreenActive} from '../util.js';
 import insertStats from './stats.js';
 import insertGreeting from './greeting.js';
+import insertGuessForEach from './guessForEach.js';
 import header from '../header.js';
 import statsResult from '../stats-result.js';
+import * as gameData from '../data/game-data.js';
 import * as data from '../data/data.js';
 
 const answerFill = `
@@ -28,11 +30,19 @@ ${statsResult(data.stat)}
 
   const gameForm = node.querySelector(`.game__content`);
   const answers = gameForm.querySelectorAll(`.game__option`);
+
+
   answers.forEach((item) => {
     item.addEventListener(`click`, () => {
-      makeScreenActive(insertStats());
+      data.beginState.answers.push(`wrong`);
+      if (data.beginState.answers.length === gameData.ANSWERS_QTTY || data.beginState.lives === 0) {
+        makeScreenActive(insertStats());
+      } else {
+        makeScreenActive(insertGuessForEach());
+      }
     });
   });
+
 
   const backButton = node.querySelector(`button.back`);
   backButton.addEventListener(`click`, () => {
