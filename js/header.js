@@ -1,14 +1,9 @@
 import lives from './lives.js';
 
 export default (data) => {
-  if (data) {
-    // что с var
-    var indics = `
+  const indics = data ? `
       <div class="game__timer">${data.time}</div>
-      ${lives(data)}`;
-  } else {
-    indics = ``;
-  }
+      ${lives(data)}` : ``;
 
   const header = `
   <header class="header">
