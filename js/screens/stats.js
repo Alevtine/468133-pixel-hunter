@@ -1,19 +1,20 @@
 import {getFromTemplate, makeScreenActive} from '../util.js';
 import insertGreeting from './greeting.js';
+import header from '../header.js';
+import * as data from '../data/data.js';
+import * as gameData from '../data/game-data.js';
+import statsResult from '../stats-result.js';
+
 
 export default function insertStats() {
+  const fastAnswers = data.beginState.answers.filter((it) => it === `fast`).length;
+  const slowAnswers = data.beginState.answers.filter((it) => it === `slow`).length;
+  const interimResult = data.beginState.answers.filter((it) => it === `unknown` || it === `wrong`).length;
+  const livesLeft = data.beginState.lives;
+  const totalResult = gameData.getScore(data.beginState.answers, data.beginState.lives);
+
   const node = getFromTemplate(`
-  <header class="header">
-    <button class="back">
-      <span class="visually-hidden">Вернуться к началу</span>
-      <svg class="icon" width="45" height="45" viewBox="0 0 45 45" fill="#000000">
-        <use xlink:href="img/sprite.svg#arrow-left"></use>
-      </svg>
-      <svg class="icon" width="101" height="44" viewBox="0 0 101 44" fill="#000000">
-        <use xlink:href="img/sprite.svg#logo-small"></use>
-      </svg>
-    </button>
-  </header>
+    ${header()}
   <section class="result">
     <h2 class="result__title">Победа!</h2>
     <table class="result__table">
@@ -21,44 +22,35 @@ export default function insertStats() {
         <td class="result__number">1.</td>
         <td colspan="2">
           <ul class="stats">
-            <li class="stats__result stats__result--wrong"></li>
-            <li class="stats__result stats__result--slow"></li>
-            <li class="stats__result stats__result--fast"></li>
-            <li class="stats__result stats__result--correct"></li>
-            <li class="stats__result stats__result--wrong"></li>
-            <li class="stats__result stats__result--unknown"></li>
-            <li class="stats__result stats__result--slow"></li>
-            <li class="stats__result stats__result--unknown"></li>
-            <li class="stats__result stats__result--fast"></li>
-            <li class="stats__result stats__result--unknown"></li>
+${statsResult(data.beginState.answers)}
           </ul>
         </td>
         <td class="result__points">× 100</td>
-        <td class="result__total">900</td>
+        <td class="result__total">${totalResult - interimResult * gameData.Point.bonus}</td>
       </tr>
       <tr>
         <td></td>
         <td class="result__extra">Бонус за скорость:</td>
-        <td class="result__extra">1 <span class="stats__result stats__result--fast"></span></td>
+        <td class="result__extra">${fastAnswers} <span class="stats__result stats__result--fast"></span></td>
         <td class="result__points">× 50</td>
-        <td class="result__total">50</td>
+        <td class="result__total">${fastAnswers * gameData.Point.fast}</td>
       </tr>
       <tr>
         <td></td>
         <td class="result__extra">Бонус за жизни:</td>
-        <td class="result__extra">2 <span class="stats__result stats__result--alive"></span></td>
+        <td class="result__extra">${livesLeft} <span class="stats__result stats__result--alive"></span></td>
         <td class="result__points">× 50</td>
-        <td class="result__total">100</td>
+        <td class="result__total">${livesLeft * gameData.Point.bonus}</td>
       </tr>
       <tr>
         <td></td>
         <td class="result__extra">Штраф за медлительность:</td>
-        <td class="result__extra">2 <span class="stats__result stats__result--slow"></span></td>
+        <td class="result__extra">${slowAnswers} <span class="stats__result stats__result--slow"></span></td>
         <td class="result__points">× 50</td>
-        <td class="result__total">-100</td>
+        <td class="result__total">${slowAnswers * gameData.Point.slow}</td>
       </tr>
       <tr>
-        <td colspan="5" class="result__total  result__total--final">950</td>
+        <td colspan="5" class="result__total  result__total--final">${totalResult}</td>
       </tr>
     </table>
     <table class="result__table">
@@ -80,37 +72,6 @@ export default function insertStats() {
         </td>
         <td class="result__total"></td>
         <td class="result__total  result__total--final">fail</td>
-      </tr>
-    </table>
-    <table class="result__table">
-      <tr>
-        <td class="result__number">3.</td>
-        <td colspan="2">
-          <ul class="stats">
-            <li class="stats__result stats__result--wrong"></li>
-            <li class="stats__result stats__result--slow"></li>
-            <li class="stats__result stats__result--fast"></li>
-            <li class="stats__result stats__result--correct"></li>
-            <li class="stats__result stats__result--wrong"></li>
-            <li class="stats__result stats__result--unknown"></li>
-            <li class="stats__result stats__result--slow"></li>
-            <li class="stats__result stats__result--unknown"></li>
-            <li class="stats__result stats__result--fast"></li>
-            <li class="stats__result stats__result--unknown"></li>
-          </ul>
-        </td>
-        <td class="result__points">× 100</td>
-        <td class="result__total">900</td>
-      </tr>
-      <tr>
-        <td></td>
-        <td class="result__extra">Бонус за жизни:</td>
-        <td class="result__extra">2 <span class="stats__result stats__result--alive"></span></td>
-        <td class="result__points">× 50</td>
-        <td class="result__total">100</td>
-      </tr>
-      <tr>
-        <td colspan="5" class="result__total  result__total--final">950</td>
       </tr>
     </table>
   </section>`);

@@ -40,25 +40,25 @@ describe(`Getting score`, () => {
     assert.equal(game.getScore([], 3), -1);
   });
   it(`should be -1 when less than 10 answers are present`, () => {
-    assert.equal(game.getScore([`default`, `slow`, `fast`, `slow`, `default`], 3), -1);
+    assert.equal(game.getScore([`correct`, `slow`, `fast`, `slow`, `correct`], 3), -1);
   });
   it(`should be -1 when lives < 0`, () => {
-    assert.equal(game.getScore([`default`, `slow`, `fast`, `slow`, `default`, `fast`, `default`, `slow`, `fast`, `slow`], -1), -1);
+    assert.equal(game.getScore([`correct`, `slow`, `fast`, `slow`, `correct`, `fast`, `correct`, `slow`, `fast`, `slow`], -1), -1);
   });
   it(`should be -1 when no lives left`, () => {
-    assert.equal(game.getScore([`default`, `slow`, `fast`, `slow`, `default`, `fast`, `default`, `slow`, `fast`, `slow`], 0), -1);
+    assert.equal(game.getScore([`correct`, `slow`, `fast`, `slow`, `correct`, `fast`, `correct`, `slow`, `fast`, `slow`], 0), -1);
   });
   it(`should be -1 when lives qtty < 0`, () => {
-    assert.equal(game.getScore([`default`, `slow`, `fast`, `slow`, `default`, `fast`, `default`, `slow`, `fast`, `slow`], -1), -1);
+    assert.equal(game.getScore([`correct`, `slow`, `fast`, `slow`, `correct`, `fast`, `correct`, `slow`, `fast`, `slow`], -1), -1);
   });
   it(`should be -1 when lives qtty > 3`, () => {
-    assert.equal(game.getScore([`default`, `slow`, `fast`, `slow`, `default`, `fast`, `default`, `slow`, `fast`, `slow`], 4), -1);
+    assert.equal(game.getScore([`correct`, `slow`, `fast`, `slow`, `correct`, `fast`, `correct`, `slow`, `fast`, `slow`], 4), -1);
   });
   it(`should be 1150 when time is average, all answers are present, all lives are saved`, () => {
     assert.equal(game.getScore([`slow`, `fast`, `slow`, `fast`, `slow`, `fast`, `slow`, `fast`, `slow`, `fast`], 3), 1150);
   });
   it(`should be 1150 when time is average, all answers are present, all lives are saved`, () => {
-    assert.equal(game.getScore([`default`, `default`, `default`, `default`, `default`, `default`, `default`, `default`, `default`, `default`], 3), 1150);
+    assert.equal(game.getScore([`correct`, `correct`, `correct`, `correct`, `correct`, `correct`, `correct`, `correct`, `correct`, `correct`], 3), 1150);
   });
   it(`should be 1650 when time is fast, all answers are present, all lives are saved`, () => {
     assert.equal(game.getScore([`fast`, `fast`, `fast`, `fast`, `fast`, `fast`, `fast`, `fast`, `fast`, `fast`], 3), 1650);
@@ -66,11 +66,11 @@ describe(`Getting score`, () => {
   it(`should be 650 when time is slow, all answers are present, all lives are saved`, () => {
     assert.equal(game.getScore([`slow`, `slow`, `slow`, `slow`, `slow`, `slow`, `slow`, `slow`, `slow`, `slow`], 3), 650);
   });
-  it(`should be 900 when answers are slow and default, all answers are present, all lives are saved`, () => {
-    assert.equal(game.getScore([`default`, `slow`, `default`, `slow`, `default`, `slow`, `default`, `slow`, `default`, `slow`], 3), 900);
+  it(`should be 900 when answers are slow and correct, all answers are present, all lives are saved`, () => {
+    assert.equal(game.getScore([`correct`, `slow`, `correct`, `slow`, `correct`, `slow`, `correct`, `slow`, `correct`, `slow`], 3), 900);
   });
-  it(`should be 1000 when answers are slow, fast and default, all answers are present, 1 live is left`, () => {
-    assert.equal(game.getScore([`default`, `slow`, `fast`, `slow`, `default`, `fast`, `default`, `slow`, `fast`, `slow`], 1), 1000);
+  it(`should be 1000 when answers are slow, fast and correct, all answers are present, 1 live is left`, () => {
+    assert.equal(game.getScore([`correct`, `slow`, `fast`, `slow`, `correct`, `fast`, `correct`, `slow`, `fast`, `slow`], 1), 1000);
   });
 });
 
