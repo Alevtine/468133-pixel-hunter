@@ -7,11 +7,6 @@ export const beginState = Object.freeze({
 });
 
 
-export const Answer = {
-  right: [`slow`, `fast`],
-  wrong: `wrong`
-};
-
 export const stat = new Map([[1, `wrong`], [2, `fast`], [3, `slow`],
   [4, `unknown`], [5, `wrong`], [6, `fast`], [7, `slow`], [8, `unknown`],
   [9, `correct`], [10, `correct`]]);
