@@ -3,7 +3,7 @@ import header from '../header.js';
 
 export default class RulesView extends AbstractView {
 
-  get template () {
+  get template() {
     return `
       ${header()}
       <section class="rules">
@@ -22,7 +22,7 @@ export default class RulesView extends AbstractView {
           <button class="rules__button  continue" type="submit" disabled>Go!</button>
         </form>
       </section>
-      `
+      `;
   }
 
   bind() {
@@ -30,7 +30,7 @@ export default class RulesView extends AbstractView {
     const continueButton = this.element.querySelector(`.rules__button`);
     const backButton = this.element.querySelector(`button.back`);
 
-    formInput.addEventListener('input', () => {
+    formInput.addEventListener(`input`, () => {
       if (formInput.value.length === 0 || formInput.value.trim().length <= 0) {
         continueButton.disabled = true;
       } else {
