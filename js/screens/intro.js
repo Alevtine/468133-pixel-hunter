@@ -1,19 +1,12 @@
-import {getFromTemplate, makeScreenActive} from '../util.js';
+import {makeScreenActive} from '../util.js';
 import insertGreeting from './greeting.js';
+import IntroView from '../view/intro-view.js';
 
-export default function insertIntro() {
-  const node = getFromTemplate(`
-    <section class="intro">
-      <button class="intro__asterisk asterisk" type="button"><span class="visually-hidden">Продолжить</span>*</button>
-      <p class="intro__motto"><sup>*</sup> Это не фото. Это рисунок маслом нидерландского художника-фотореалиста Tjalf Sparnaay.</p>
-    </section>
-  `);
-
-  const starButton = node.querySelector(`.intro__asterisk`);
-
-  starButton.addEventListener(`click`, () => {
+export default () => {
+  const intro = new IntroView();
+  intro.onClickNext = () => {
     makeScreenActive(insertGreeting());
-  });
+  };
 
-  return node;
-}
+  return intro.element;
+};

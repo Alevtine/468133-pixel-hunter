@@ -1,4 +1,4 @@
-import {getFromTemplate, makeScreenActive} from '../util.js';
+import {getFromTemplate, makeScreenActive, resize} from '../util.js';
 import insertFindImgOrPhoto from './findImgOrPhoto';
 import insertGreeting from './greeting.js';
 import insertStats from './stats.js';
@@ -11,7 +11,7 @@ import * as data from '../data/data.js';
 const answerFill = `
 ${data.QuestionScreen[1][`answers`].map((it) =>
     `<div class="game__option">
-    <img src="${it.pictureURL}" alt="Option 1" width="705" height="455">
+    <img src="${it.pictureURL}" alt="Option 1">
     <label class="game__answer  game__answer--photo">
       <input class="visually-hidden" name="question1" type="radio" value="photo">
       <span>Фото</span>
@@ -59,6 +59,13 @@ ${statsResult(data.stat)}
   const backButton = node.querySelector(`button.back`);
   backButton.addEventListener(`click`, () => {
     makeScreenActive(insertGreeting());
+  });
+
+  const pics = node.querySelectorAll(`.game__option > img`);
+  pics.forEach((it) => {
+    it.addEventListener(`load`, () => {
+      resize(it);
+    });
   });
 
   return node;
