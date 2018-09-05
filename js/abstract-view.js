@@ -1,6 +1,5 @@
 import {getFromTemplate} from './util.js';
 
-
 export default class AbstractView {
 
   get template() {}

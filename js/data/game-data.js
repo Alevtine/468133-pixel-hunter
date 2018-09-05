@@ -1,6 +1,16 @@
+import * as data from './data.js';
+
 export const ANSWERS_QTTY = 10;
 export const LIVES_QTTY = 3;
 const TIMER_SEC = 30;
+const TIME_PARAMETRES = {
+  fast: 10,
+  correct: 20,
+  slow: 30,
+  wrong: -1
+};
+
+export const currentState = Object.assign({}, data.beginState);
 
 export const Point = {
   correct: 100, // Правильный ответ: === 100 очков;
@@ -63,3 +73,28 @@ export const startTimer = (value) => {
   }
   return value;
 };
+
+
+export const createFinalStats = (state, rightAnswer) => {
+  let renewedStats = state.answers.slice();
+  if (rightAnswer) {
+    if (state.time < 30 && state.time >= 20) {
+      renewedStats.push(Answer.fast);
+    } else if (state.time < 20 && state.time >= 10) {
+      renewedStats.push(Answer.slow);
+    } else if (state.time < 10) {
+      renewedStats.push(Answer.correct);
+    }
+  } else {
+    renewedStats.push(Answer.wrong);
+  }
+  return {answers: renewedStats};
+};
+
+export function livesCalculation(state, rightAnswer) {
+  if (rightAnswer) {
+    return state;
+  } else {
+    return Object.assign({}, state, {lives: state.lives - 1});
+  }
+}
