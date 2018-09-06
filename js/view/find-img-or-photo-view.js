@@ -1,26 +1,33 @@
 import {resize} from '../util.js';
 import header from '../header.js';
 import statsResult from '../stats-result.js';
-import * as gameData from '../data/game-data.js';
-import * as data from '../data/data.js';
 
 import AbstractView from '../abstract-view.js';
 
 export default class FindImgOrPhoto extends AbstractView {
 
+  constructor(questionData, currentState) {
+    super();
+    if (questionData.kind !== `findImgOrPhoto`) {
+      throw new Error(`incorrect screen kind`);
+    }
+    this.questionData = questionData;
+    this.currentState = currentState;
+  }
+
   get template() {
     return `
-      ${header(data.beginState)}
+      ${header(this.currentState)}
     <section class="game">
-      <p class="game__task">${data.QuestionScreen[2][`title`]}</p>
+      <p class="game__task">${this.questionData.title}</p>
       <form class="game__content  game__content--triple">
-  ${data.QuestionScreen[2][`answers`].map((it, i) =>
+  ${this.questionData.answers.map((answer, i) =>
     `<div class="game__option">
-    <img src="${it.pictureURL}" alt="Option ${i + 1}">
+    <img src="${answer.pictureURL}" alt="Option ${i + 1}">
   </div>`).join(``)}
       </form>
       <ul class="stats">
-  ${statsResult(data.stat)}
+  ${statsResult(this.currentState.stat)}
       </ul>
     </section>
     `;
@@ -34,12 +41,8 @@ export default class FindImgOrPhoto extends AbstractView {
 
     answers.forEach((item) => {
       item.addEventListener(`click`, () => {
-        data.beginState.answers.push(`wrong`);
-        if (data.beginState.answers.length === gameData.ANSWERS_QTTY || data.beginState.lives === 0) {
-          this.onAnswer(!rightAnswer);
-        } else {
-          this.onAnswer(rightAnswer);
-        }
+        this.currentState.answers.push(`wrong`);
+        this.onAnswer();
       });
     });
 

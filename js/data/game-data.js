@@ -1,5 +1,3 @@
-import * as data from './data.js';
-
 export const ANSWERS_QTTY = 10;
 export const LIVES_QTTY = 3;
 const TIMER_SEC = 30;
@@ -9,8 +7,6 @@ const TIME_PARAMETRES = {
   slow: 30,
   wrong: -1
 };
-
-export const currentState = Object.assign({}, data.beginState);
 
 export const Point = {
   correct: 100, // Правильный ответ: === 100 очков;
@@ -78,11 +74,11 @@ export const startTimer = (value) => {
 export const createFinalStats = (state, rightAnswer) => {
   let renewedStats = state.answers.slice();
   if (rightAnswer) {
-    if (state.time < 30 && state.time >= 20) {
+    if (state.time < TIME_PARAMETRES.slow && state.time >= TIME_PARAMETRES.correct) {
       renewedStats.push(Answer.fast);
-    } else if (state.time < 20 && state.time >= 10) {
+    } else if (state.time < TIME_PARAMETRES.correct && state.time >= TIME_PARAMETRES.fast) {
       renewedStats.push(Answer.slow);
-    } else if (state.time < 10) {
+    } else if (state.time < TIME_PARAMETRES.fast) {
       renewedStats.push(Answer.correct);
     }
   } else {
@@ -91,8 +87,8 @@ export const createFinalStats = (state, rightAnswer) => {
   return {answers: renewedStats};
 };
 
-export function livesCalculation(state, rightAnswer) {
-  if (rightAnswer) {
+export function livesCalculation(state, answer) {
+  if (answer === Answer.slow || Answer.fast || Answer.correct) {
     return state;
   } else {
     return Object.assign({}, state, {lives: state.lives - 1});

@@ -1,17 +1,18 @@
 import {makeScreenActive} from '../util.js';
-import insertGuessForEach from './guessForEach.js';
-import insertGreeting from './greeting.js';
+import {QuestionScreens} from '../data/data.js';
+import QuestionManager from './question-manager.js';
+import greeting from './greeting.js';
 import RulesView from '../view/rules-view.js';
 
 export default () => {
   const rules = new RulesView();
-
   rules.onClickNext = () => {
-    makeScreenActive(insertGuessForEach());
+    const questionManager = new QuestionManager(QuestionScreens);
+    questionManager.start();
   };
 
   rules.onClickBack = () => {
-    makeScreenActive(insertGreeting());
+    makeScreenActive(greeting());
   };
 
   return rules.element;

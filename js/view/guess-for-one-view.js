@@ -1,22 +1,28 @@
 import {resize} from '../util.js';
 import header from '../header.js';
 import statsResult from '../stats-result.js';
-import * as gameData from '../data/game-data.js';
-import * as data from '../data/data.js';
-
 import AbstractView from '../abstract-view.js';
 
 export default class GuessForOne extends AbstractView {
 
+  constructor(questionData, currentState) {
+    super();
+    if (questionData.kind !== `guessForOne`) {
+      throw new Error(`incorrect screen kind`);
+    }
+    this.questionData = questionData;
+    this.currentState = currentState;
+  }
+
   get template() {
     return `
-      ${header(data.beginState)}
+      ${header(this.currentState)}
       <section class="game">
-        <p class="game__task">${data.QuestionScreen[1][`title`]}</p>
+        <p class="game__task">${this.questionData.title}</p>
         <form class="game__content  game__content--wide">
-  ${data.QuestionScreen[1][`answers`].map((it) =>
+  ${this.questionData.answers.map((answer) =>
     `<div class="game__option">
-      <img src="${it.pictureURL}" alt="Option 1">
+      <img src="${answer.pictureURL}" alt="Option 1">
       <label class="game__answer  game__answer--photo">
         <input class="visually-hidden" name="question1" type="radio" value="photo">
         <span>Фото</span>
@@ -28,26 +34,22 @@ export default class GuessForOne extends AbstractView {
     </div>`)}
         </form>
         <ul class="stats">
-  ${statsResult(data.stat)}
+  ${statsResult(this.currentState.stat)}
         </ul>
       </section>`;
   }
 
   bind() {
     const gameForm = this.element.querySelector(`.game__content`);
-    const answers = gameForm.querySelectorAll(`.game__answer`);
     const backButton = this.element.querySelector(`button.back`);
     const pics = this.element.querySelectorAll(`.game__option > img`);
 
     gameForm.addEventListener(`change`, () => {
-      data.beginState.answers.push(`fast`);
+      const answers = gameForm.querySelectorAll(`input[type="radio"]:checked`);
       answers.forEach((item) => {
-        if (item.querySelector(`input:checked`)) {
-          if (data.beginState.answers.length === gameData.ANSWERS_QTTY || data.beginState.lives === 0) {
-            this.onAnswer(!rightAnswer);
-          } else {
-            this.onAnswer(rightAnswer);
-          }
+        if (item) {
+          this.currentState.answers.push(`fast`);
+          this.onAnswer();
         }
       });
     });
@@ -55,7 +57,6 @@ export default class GuessForOne extends AbstractView {
     backButton.addEventListener(`click`, () => {
       this.onClickBack();
     });
-
 
     pics.forEach((it) => {
       it.addEventListener(`load`, () => {
