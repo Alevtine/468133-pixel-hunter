@@ -40,19 +40,21 @@ export default class GuessForOne extends AbstractView {
   }
 
   bind() {
-    const gameForm = this.element.querySelector(`.game__content`);
+    const answers = this.element.querySelectorAll(`input`);
     const backButton = this.element.querySelector(`button.back`);
     const pics = this.element.querySelectorAll(`.game__option > img`);
 
-    gameForm.addEventListener(`change`, () => {
-      const answers = gameForm.querySelectorAll(`input[type="radio"]:checked`);
-      answers.forEach((item) => {
-        if (item) {
-          this.currentState.answers.push(`fast`);
-          this.onAnswer();
+    for (const answer of answers) {
+      answer.addEventListener(`change`, (evt) => {
+        let isCorrect;
+        if (evt.target.value === this.questionData.answers[0].type) {
+          isCorrect = true;
+        } else {
+          isCorrect = false;
         }
+        this.onAnswer(isCorrect);
       });
-    });
+    }
 
     backButton.addEventListener(`click`, () => {
       this.onClickBack();

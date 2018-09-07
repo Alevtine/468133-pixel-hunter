@@ -40,9 +40,17 @@ export default class FindImgOrPhoto extends AbstractView {
     const pics = this.element.querySelectorAll(`.game__option > img`);
 
     answers.forEach((item) => {
-      item.addEventListener(`click`, () => {
-        this.currentState.answers.push(`wrong`);
-        this.onAnswer();
+      item.addEventListener(`click`, (evt) => {
+        this.questionData.answers.forEach((answer) => {
+          let isCorrect;
+          if (evt.target.src === answer.pictureURL && answer.type === `paint`) {
+            isCorrect = true;
+            this.onAnswer(isCorrect);
+          } else {
+            isCorrect = false;
+            this.onAnswer(isCorrect);
+          }
+        });
       });
     });
 

@@ -6,7 +6,7 @@ import {makeScreenActive} from '../util.js';
 import greeting from './greeting.js';
 import stats from './stats.js';
 
-import * as gameData from '../data/game-data.js';
+import {TIME_PARAMETRES, Answer} from '../data/game-data.js';
 
 const questionKindMap = {
   'guessForEach': GuessForEach,
@@ -28,8 +28,8 @@ export default class QuestionManager {
   showQuestion(questionData, nextQuestionNumber) {
     const questionView = new questionKindMap[questionData.kind](questionData, this.currentState);
 
-    questionView.onAnswer = () => {
-      this.isAnswerCorrect(this.answer);
+    questionView.onAnswer = (answer) => {
+      this.isAnswerCorrect(answer);
       this.nextQuestion(nextQuestionNumber);
     };
 
@@ -51,26 +51,27 @@ export default class QuestionManager {
     }
   }
 
-  isAnswerCorrect(answer) {
-    if (answer) {
-      answer = this.checkTypeAnswer(this.cuurentState.time);
+  isAnswerCorrect(isCorrect) {
+    if (isCorrect) {
+      this.checkTypeAnswer(this.currentState.time);
     } else {
-      answer = gameData.Answer.wrong;
-      Object.assign({}, this.currentState, {lives: this.currentState.lives - 1});
+      Object.assign({}, this.currentState,
+          {lives: this.currentState.lives - 1},
+          {answers: this.currentState.answers.push(`wrong`)});
     }
   }
 
   checkTypeAnswer(time) {
-    this.time = gameData.TIMER_SEC - time;
+    this.time = time;
     let answerType;
-    if (this.time < gameData.TIME_PARAMETRES.fast) {
-      answerType = gameData.Answer.fast;
-    } else if (this.time <= gameData.TIME_PARAMETRES.correct) {
-      answerType = gameData.Answer.correct;
-    } else {
-      answerType = gameData.Answer.slow;
+    if (this.time <= TIME_PARAMETRES.slow && this.time >= TIME_PARAMETRES.correct) {
+      answerType = Answer.fast;
+    } else if (this.time < TIME_PARAMETRES.correct && this.time >= TIME_PARAMETRES.fast) {
+      answerType = Answer.correct;
+    } else if (this.time < TIME_PARAMETRES.fast) {
+      answerType = Answer.slow;
     }
-    return answerType;
+    return this.currentState.answers.push(answerType);
   }
 
 }

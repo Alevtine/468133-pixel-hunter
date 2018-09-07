@@ -44,11 +44,18 @@ export default class GuessForEach extends AbstractView {
     const backButton = this.element.querySelector(`button.back`);
     const pics = this.element.querySelectorAll(`.game__option > img`);
 
-    gameForm.addEventListener(`change`, () => {
+    gameForm.addEventListener(`change`, (evt) => {
       const answers = gameForm.querySelectorAll(`input[type="radio"]:checked`);
       if (answers.length === 2) {
-        this.currentState.answers.push(`wrong`);
-        this.onAnswer();
+        this.questionData.answers.forEach((item) => {
+          let isCorrect;
+          if (evt.target.value !== item.type) {
+            isCorrect = false;
+            this.onAnswer(isCorrect);
+          } else {
+            isCorrect = true;
+          }
+        });
       }
     });
 

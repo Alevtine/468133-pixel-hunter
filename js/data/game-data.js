@@ -1,7 +1,7 @@
 export const ANSWERS_QTTY = 10;
 export const LIVES_QTTY = 3;
-const TIMER_SEC = 30;
-const TIME_PARAMETRES = {
+export const TIMER_SEC = 30;
+export const TIME_PARAMETRES = {
   fast: 10,
   correct: 20,
   slow: 30,
@@ -15,7 +15,7 @@ export const Point = {
   bonus: 50 // За жизнь
 };
 
-const Answer = {
+export const Answer = {
   slow: `slow`,
   fast: `fast`,
   correct: `correct`,
@@ -70,22 +70,6 @@ export const startTimer = (value) => {
   return value;
 };
 
-
-export const createFinalStats = (state, rightAnswer) => {
-  let renewedStats = state.answers.slice();
-  if (rightAnswer) {
-    if (state.time < TIME_PARAMETRES.slow && state.time >= TIME_PARAMETRES.correct) {
-      renewedStats.push(Answer.fast);
-    } else if (state.time < TIME_PARAMETRES.correct && state.time >= TIME_PARAMETRES.fast) {
-      renewedStats.push(Answer.slow);
-    } else if (state.time < TIME_PARAMETRES.fast) {
-      renewedStats.push(Answer.correct);
-    }
-  } else {
-    renewedStats.push(Answer.wrong);
-  }
-  return {answers: renewedStats};
-};
 
 export function livesCalculation(state, answer) {
   if (answer === Answer.slow || Answer.fast || Answer.correct) {

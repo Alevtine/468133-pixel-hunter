@@ -7,6 +7,12 @@ import statsResult from '../stats-result.js';
 
 export default class StatsView extends AbstractView {
 
+  constructor(questionData, currentState) {
+    super();
+    this.questionData = questionData;
+    this.currentState = currentState;
+  }
+
   get template() {
     const fastAnswers = data.beginState.answers.filter((it) => it === `fast`).length;
     const slowAnswers = data.beginState.answers.filter((it) => it === `slow`).length;
