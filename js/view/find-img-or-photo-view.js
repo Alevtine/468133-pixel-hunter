@@ -1,5 +1,4 @@
 import {resize} from '../util.js';
-import header from '../header.js';
 import statsResult from '../stats-result.js';
 
 import AbstractView from '../abstract-view.js';
@@ -17,7 +16,6 @@ export default class FindImgOrPhoto extends AbstractView {
 
   get template() {
     return `
-      ${header(this.currentState)}
     <section class="game">
       <p class="game__task">${this.questionData.title}</p>
       <form class="game__content  game__content--triple">
@@ -27,7 +25,7 @@ export default class FindImgOrPhoto extends AbstractView {
   </div>`).join(``)}
       </form>
       <ul class="stats">
-  ${statsResult(this.currentState.stat)}
+  ${statsResult(this.currentState.answers)}
       </ul>
     </section>
     `;
@@ -36,26 +34,15 @@ export default class FindImgOrPhoto extends AbstractView {
   bind() {
     const gameForm = this.element.querySelector(`.game__content`);
     const answers = gameForm.querySelectorAll(`.game__option`);
-    const backButton = this.element.querySelector(`button.back`);
     const pics = this.element.querySelectorAll(`.game__option > img`);
 
     answers.forEach((item) => {
-      item.addEventListener(`click`, (evt) => {
-        this.questionData.answers.forEach((answer) => {
-          let isCorrect;
-          if (evt.target.src === answer.pictureURL && answer.type === `paint`) {
-            isCorrect = true;
-            this.onAnswer(isCorrect);
-          } else {
-            isCorrect = false;
-            this.onAnswer(isCorrect);
-          }
-        });
+      item.addEventListener(`click`, () => {
+        const userAnswerIndex = Array.prototype.indexOf.call(
+            item.parentNode.children, item
+        );
+        this.onAnswer(userAnswerIndex);
       });
-    });
-
-    backButton.addEventListener(`click`, () => {
-      this.onClickBack();
     });
 
     pics.forEach((it) => {
@@ -66,6 +53,5 @@ export default class FindImgOrPhoto extends AbstractView {
   }
 
   onAnswer() {}
-  onClickBack() {}
 
 }

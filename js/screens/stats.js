@@ -1,13 +1,21 @@
 import {makeScreenActive} from '../util.js';
 import greeting from './greeting.js';
 import StatsView from '../view/stats-view.js';
+import HeaderView from '../view/header-view.js';
 
-export default () => {
-  const stats = new StatsView();
+export default class Stats {
+  constructor(finalState) {
 
-  stats.onClickBack = () => {
-    makeScreenActive(greeting());
-  };
+    const header = new HeaderView(finalState);
+    const stats = new StatsView(finalState);
+    const node = document.createElement(`div`);
+    node.appendChild(header.element);
+    node.appendChild(stats.element);
 
-  return stats.element;
-};
+    header.onClickBack = () => {
+      makeScreenActive(greeting());
+    };
+
+    return node;
+  }
+}

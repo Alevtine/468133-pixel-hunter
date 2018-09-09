@@ -1,5 +1,4 @@
 import {resize} from '../util.js';
-import header from '../header.js';
 import statsResult from '../stats-result.js';
 import AbstractView from '../abstract-view.js';
 
@@ -16,7 +15,6 @@ export default class GuessForOne extends AbstractView {
 
   get template() {
     return `
-      ${header(this.currentState)}
       <section class="game">
         <p class="game__task">${this.questionData.title}</p>
         <form class="game__content  game__content--wide">
@@ -34,31 +32,20 @@ export default class GuessForOne extends AbstractView {
     </div>`)}
         </form>
         <ul class="stats">
-  ${statsResult(this.currentState.stat)}
+  ${statsResult(this.currentState.answers)}
         </ul>
       </section>`;
   }
 
   bind() {
     const answers = this.element.querySelectorAll(`input`);
-    const backButton = this.element.querySelector(`button.back`);
     const pics = this.element.querySelectorAll(`.game__option > img`);
 
     for (const answer of answers) {
       answer.addEventListener(`change`, (evt) => {
-        let isCorrect;
-        if (evt.target.value === this.questionData.answers[0].type) {
-          isCorrect = true;
-        } else {
-          isCorrect = false;
-        }
-        this.onAnswer(isCorrect);
+        this.onAnswer(evt.target.value);
       });
     }
-
-    backButton.addEventListener(`click`, () => {
-      this.onClickBack();
-    });
 
     pics.forEach((it) => {
       it.addEventListener(`load`, () => {
@@ -68,6 +55,5 @@ export default class GuessForOne extends AbstractView {
   }
 
   onAnswer() {}
-  onClickBack() {}
 
 }

@@ -4,19 +4,33 @@ import FindImgOrPhoto from '../view/find-img-or-photo-view.js';
 import {beginState} from '../data/data.js';
 import {makeScreenActive} from '../util.js';
 import greeting from './greeting.js';
-import stats from './stats.js';
+import Stats from './stats.js';
 
-import {TIME_PARAMETRES, Answer} from '../data/game-data.js';
+import {TIME_PARAMETRES, Answer, calculateLives} from '../data/game-data.js';
+import HeaderView from '../view/header-view.js';
 
 const questionKindMap = {
-  'guessForEach': GuessForEach,
-  'guessForOne': GuessForOne,
-  'findImgOrPhoto': FindImgOrPhoto
+  'guessForEach': {
+    View: GuessForEach,
+    validator: (questionData, userAnswers) => questionData.answers
+        .map((answer, i) => answer.type === userAnswers[i])
+        .reduce((acc, handleAnswer) => acc && handleAnswer)
+  },
+  'guessForOne': {
+    View: GuessForOne,
+    validator: (questionData, userAnswer) => questionData.answers[0].type === userAnswer
+  },
+  'findImgOrPhoto': {
+    View: FindImgOrPhoto,
+    validator: (questionData, userAnswerIndex) => questionData.answers
+        .reduce((result, answer, i) => answer.type === `paint` ? i : result, -1) === userAnswerIndex
+  }
 };
 
 export default class QuestionManager {
   constructor(questionsData) {
     this._questionsData = questionsData;
+
   }
 
   start() {
@@ -26,18 +40,23 @@ export default class QuestionManager {
   }
 
   showQuestion(questionData, nextQuestionNumber) {
-    const questionView = new questionKindMap[questionData.kind](questionData, this.currentState);
+    const {View, validator} = questionKindMap[questionData.kind];
+    const questionView = new View(questionData, this.currentState);
+    const header = new HeaderView(this.currentState);
+    const node = document.createElement(`div`);
+    node.appendChild(header.element);
+    node.appendChild(questionView.element);
 
     questionView.onAnswer = (answer) => {
-      this.isAnswerCorrect(answer);
+      this.handleAnswer(validator(questionData, answer));
       this.nextQuestion(nextQuestionNumber);
     };
 
-    questionView.onClickBack = () => {
+    header.onClickBack = () => {
       makeScreenActive(greeting());
     };
 
-    makeScreenActive(questionView.element);
+    makeScreenActive(node);
   }
 
   nextQuestion(questionNumber) {
@@ -45,19 +64,23 @@ export default class QuestionManager {
       throw new Error(`question number should be positive`);
     }
     if (questionNumber >= this._questionsData.length) {
-      makeScreenActive(stats());
+      makeScreenActive(new Stats(this.currentState));
+    } else if (this.currentState.lives <= 0) {
+      this.currentState.isWin = false;
+      makeScreenActive(new Stats(this.currentState));
     } else {
       this.showQuestion(this._questionsData[questionNumber], questionNumber + 1);
     }
+    this.currentState.level += 1;
   }
 
-  isAnswerCorrect(isCorrect) {
+  handleAnswer(isCorrect) {
     if (isCorrect) {
       this.checkTypeAnswer(this.currentState.time);
     } else {
-      Object.assign({}, this.currentState,
-          {lives: this.currentState.lives - 1},
-          {answers: this.currentState.answers.push(`wrong`)});
+      this.currentState.lives = calculateLives(this.currentState.lives, isCorrect);
+      this.currentState.answers.push(Answer.wrong);
+
     }
   }
 

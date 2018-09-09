@@ -1,5 +1,4 @@
 import {resize} from '../util.js';
-import header from '../header.js';
 import statsResult from '../stats-result.js';
 import AbstractView from '../abstract-view.js';
 
@@ -16,7 +15,6 @@ export default class GuessForEach extends AbstractView {
 
   get template() {
     return `
-      ${header(this.currentState)}
       <section class="game">
         <p class="game__task">${this.questionData.title}</p>
     <form class="game__content">
@@ -34,33 +32,21 @@ export default class GuessForEach extends AbstractView {
       </div>`).join(``)}
     </form>
         <ul class="stats">
-  ${statsResult(this.currentState.stat)}
+  ${statsResult(this.currentState.answers)}
         </ul>
       </section>`;
   }
 
   bind() {
     const gameForm = this.element.querySelector(`.game__content`);
-    const backButton = this.element.querySelector(`button.back`);
     const pics = this.element.querySelectorAll(`.game__option > img`);
 
-    gameForm.addEventListener(`change`, (evt) => {
-      const answers = gameForm.querySelectorAll(`input[type="radio"]:checked`);
-      if (answers.length === 2) {
-        this.questionData.answers.forEach((item) => {
-          let isCorrect;
-          if (evt.target.value !== item.type) {
-            isCorrect = false;
-            this.onAnswer(isCorrect);
-          } else {
-            isCorrect = true;
-          }
-        });
+    gameForm.addEventListener(`change`, () => {
+      const userAnswers = Array.from(gameForm.querySelectorAll(`input[type="radio"]:checked`))
+        .map((element) => element.value);
+      if (userAnswers.length === this.questionData.answers.length) {
+        this.onAnswer(userAnswers);
       }
-    });
-
-    backButton.addEventListener(`click`, () => {
-      this.onClickBack();
     });
 
     pics.forEach((it) => {
@@ -71,6 +57,4 @@ export default class GuessForEach extends AbstractView {
 
   }
   onAnswer() {}
-  onClickBack() {}
-
 }

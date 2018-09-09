@@ -1,11 +1,9 @@
 import AbstractView from '../abstract-view.js';
-import header from '../header.js';
 
 export default class RulesView extends AbstractView {
 
   get template() {
     return `
-      ${header()}
       <section class="rules">
         <h2 class="rules__title">Правила</h2>
         <ul class="rules__description">
@@ -28,7 +26,6 @@ export default class RulesView extends AbstractView {
   bind() {
     const formInput = this.element.querySelector(`.rules__input`);
     const continueButton = this.element.querySelector(`.rules__button`);
-    const backButton = this.element.querySelector(`button.back`);
 
     formInput.addEventListener(`input`, () => {
       if (formInput.value.length === 0 || formInput.value.trim().length <= 0) {
@@ -41,13 +38,8 @@ export default class RulesView extends AbstractView {
     continueButton.addEventListener(`click`, () => {
       this.onClickNext();
     });
-
-    backButton.addEventListener(`click`, () => {
-      this.onClickBack();
-    });
   }
 
   onClickNext() {}
-  onClickBack() {}
 
 }

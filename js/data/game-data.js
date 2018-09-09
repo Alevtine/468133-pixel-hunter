@@ -9,10 +9,10 @@ export const TIME_PARAMETRES = {
 };
 
 export const Point = {
-  correct: 100, // Правильный ответ: === 100 очков;
-  slow: -50, // Медленный ответ: снимается 50 очков; === 50
-  fast: 50, // Быстрый ответ: добавляется 50 очков; === 150
-  bonus: 50 // За жизнь
+  correct: 100,
+  slow: -50,
+  fast: 50,
+  bonus: 50
 };
 
 export const Answer = {
@@ -44,8 +44,8 @@ export const getScore = (answersArr, lives) => {
     return -1;
   } else {
     let scores = lives * Point.bonus;
-    answersArr.forEach((it) => {
-      switch (it) {
+    answersArr.forEach((answer) => {
+      switch (answer) {
         case Answer.slow:
           scores += Point.correct + Point.slow;
           break;
@@ -54,6 +54,8 @@ export const getScore = (answersArr, lives) => {
           break;
         case Answer.correct:
           scores += Point.correct;
+          break;
+        default:
           break;
       }
     });
@@ -69,12 +71,3 @@ export const startTimer = (value) => {
   }
   return value;
 };
-
-
-export function livesCalculation(state, answer) {
-  if (answer === Answer.slow || Answer.fast || Answer.correct) {
-    return state;
-  } else {
-    return Object.assign({}, state, {lives: state.lives - 1});
-  }
-}
