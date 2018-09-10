@@ -1,4 +1,3 @@
-import {makeScreenActive} from './util.js';
-import intro from './screens/intro.js';
+import Application from './app.js';
 
-makeScreenActive(intro());
+Application.prototype.showIntro();

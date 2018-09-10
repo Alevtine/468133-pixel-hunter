@@ -1,7 +1,6 @@
-import {makeScreenActive} from '../util.js';
-import greeting from './greeting.js';
 import StatsView from '../view/stats-view.js';
 import HeaderView from '../view/header-view.js';
+import Application from '../app.js';
 
 export default class Stats {
   constructor(finalState) {
@@ -12,9 +11,7 @@ export default class Stats {
     node.appendChild(header.element);
     node.appendChild(stats.element);
 
-    header.onClickBack = () => {
-      makeScreenActive(greeting());
-    };
+    header.onClickBack = () => Application.prototype.showGreeting();
 
     return node;
   }

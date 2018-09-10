@@ -1,6 +1,10 @@
 export const ANSWERS_QTTY = 10;
 export const LIVES_QTTY = 3;
-export const TIMER_SEC = 30;
+export const TIMER_SEC = {
+  limit: 30,
+  tick: 1000
+};
+
 export const TIME_PARAMETRES = {
   fast: 10,
   correct: 20,
@@ -64,7 +68,7 @@ export const getScore = (answersArr, lives) => {
 };
 
 export const startTimer = (value) => {
-  if (value > 0 && value <= TIMER_SEC) {
+  if (value > 0 && value <= TIMER_SEC.limit) {
     value--;
   } else if (value <= 0) {
     return `Time is out`;

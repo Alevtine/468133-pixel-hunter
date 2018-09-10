@@ -1,12 +1,11 @@
-import {makeScreenActive} from '../util.js';
-import Rules from './rules.js';
 import GreetingView from '../view/greeting-view.js';
+import Application from '../app.js';
 
-export default () => {
-  const greeting = new GreetingView();
-  greeting.onClickNext = () => {
-    makeScreenActive(new Rules());
-  };
+export default class Greeting {
+  constructor() {
+    this.greeting = new GreetingView();
+    this.greeting.onClickNext = () => Application.prototype.showRules();
+    return this.greeting.element;
+  }
 
-  return greeting.element;
-};
+}

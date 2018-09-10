@@ -1,5 +1,5 @@
 import {resize} from '../util.js';
-import statsResult from '../stats-result.js';
+import statsResult from './stats-result-view.js';
 import AbstractView from '../abstract-view.js';
 
 export default class GuessForEach extends AbstractView {

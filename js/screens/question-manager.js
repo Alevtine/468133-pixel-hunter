@@ -3,11 +3,10 @@ import GuessForOne from '../view/guess-for-one-view.js';
 import FindImgOrPhoto from '../view/find-img-or-photo-view.js';
 import {beginState} from '../data/data.js';
 import {makeScreenActive} from '../util.js';
-import greeting from './greeting.js';
-import Stats from './stats.js';
 
 import {TIME_PARAMETRES, Answer, calculateLives} from '../data/game-data.js';
 import HeaderView from '../view/header-view.js';
+import Application from '../app.js';
 
 const questionKindMap = {
   'guessForEach': {
@@ -30,7 +29,6 @@ const questionKindMap = {
 export default class QuestionManager {
   constructor(questionsData) {
     this._questionsData = questionsData;
-
   }
 
   start() {
@@ -52,9 +50,7 @@ export default class QuestionManager {
       this.nextQuestion(nextQuestionNumber);
     };
 
-    header.onClickBack = () => {
-      makeScreenActive(greeting());
-    };
+    header.onClickBack = () => Application.prototype.showGreeting();
 
     makeScreenActive(node);
   }
@@ -64,10 +60,11 @@ export default class QuestionManager {
       throw new Error(`question number should be positive`);
     }
     if (questionNumber >= this._questionsData.length) {
-      makeScreenActive(new Stats(this.currentState));
+      Application.prototype.showStats(this.currentState);
     } else if (this.currentState.lives <= 0) {
+
       this.currentState.isWin = false;
-      makeScreenActive(new Stats(this.currentState));
+      Application.prototype.showStats(this.currentState);
     } else {
       this.showQuestion(this._questionsData[questionNumber], questionNumber + 1);
     }

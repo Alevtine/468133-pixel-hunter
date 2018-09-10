@@ -1,6 +1,6 @@
 import AbstractView from '../abstract-view.js';
 import {getScore, Point} from '../data/game-data.js';
-import statsResult from '../stats-result.js';
+import statsResult from './stats-result-view.js';
 
 
 export default class StatsView extends AbstractView {

@@ -1,6 +1,4 @@
-import lives from '../lives.js';
 import AbstractView from '../abstract-view.js';
-
 
 export default class HeaderView extends AbstractView {
   constructor(currentState) {
@@ -14,7 +12,10 @@ export default class HeaderView extends AbstractView {
       <header class="header">
       ${this.templateBackButton()}
       <div class="game__timer">${this.currentState.time}</div>
-      ${lives(this.currentState)}
+      <div class="game__lives">
+        ${new Array(3 - this.currentState.lives).fill(`<img src="img/heart__empty.svg" class="game__heart" alt="Life" width="32" height="32">`).join(``)}
+        ${new Array(this.currentState.lives).fill(`<img src="img/heart__full.svg" class="game__heart" alt=" Missed Life" width="31" height="27">`).join(``)}
+      </div>
       </header>`;
     }
     return `<header class="header">${this.templateBackButton()}</header>`;

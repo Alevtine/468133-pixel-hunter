@@ -1,12 +1,10 @@
-import {makeScreenActive} from '../util.js';
-import greeting from './greeting.js';
 import IntroView from '../view/intro-view.js';
+import Application from '../app.js';
 
-export default () => {
-  const intro = new IntroView();
-  intro.onClickNext = () => {
-    makeScreenActive(greeting());
-  };
-
-  return intro.element;
-};
+export default class Intro {
+  constructor() {
+    this.intro = new IntroView();
+    this.intro.onClickNext = () => Application.prototype.showGreeting();
+    return this.intro.element;
+  }
+}
