@@ -11,7 +11,7 @@ export default class Stats {
     node.appendChild(header.element);
     node.appendChild(stats.element);
 
-    header.onClickBack = () => Application.prototype.showGreeting();
+    header.onClickBack = () => Application.showGreeting();
 
     return node;
   }

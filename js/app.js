@@ -12,35 +12,33 @@ import {makeScreenActive} from './util.js';
 
 export default class Application {
 
-  start() {
+  static start() {
     this.game = new GameModel();
   }
 
-  showIntro() {
+  static showIntro() {
     const intro = new Intro();
     makeScreenActive(intro);
-    //    this.start()
   }
 
-  showGreeting() {
+  static showGreeting() {
     const greeting = new Greeting();
     makeScreenActive(greeting);
   }
 
-  showRules() {
+  static showRules() {
     const rules = new Rules();
     makeScreenActive(rules);
   }
 
-  showGame() {
+  static showGame() {
     const newGame = new QuestionManager(QuestionScreens);
     newGame.start();
   }
 
-  showStats(currentState) {
+  static showStats(currentState) {
     const stats = new Stats(currentState);
     makeScreenActive(stats);
   }
-
 
 }

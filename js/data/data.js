@@ -3,8 +3,8 @@ export const beginState = Object.freeze({
   level: 1,
   lives: 3,
   time: 30,
-  answers: [],
-  isWin: true
+  answers: Array(10).fill(`unknown`),
+  isWin: false
 });
 
 

@@ -4,7 +4,7 @@ import Application from '../app.js';
 export default class Intro {
   constructor() {
     this.intro = new IntroView();
-    this.intro.onClickNext = () => Application.prototype.showGreeting();
+    this.intro.onClickNext = () => Application.showGreeting();
     return this.intro.element;
   }
 }

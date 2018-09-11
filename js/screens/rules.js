@@ -11,8 +11,8 @@ export default class Rules {
     node.appendChild(this.header.element);
     node.appendChild(this.rules.element);
 
-    this.rules.onClickNext = () => Application.prototype.showGame();
-    this.header.onClickBack = () => Application.prototype.showGreeting();
+    this.rules.onClickNext = () => Application.showGame();
+    this.header.onClickBack = () => Application.showGreeting();
 
     return node;
   }
