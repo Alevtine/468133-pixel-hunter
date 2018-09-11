@@ -6,14 +6,16 @@ import Rules from './screens/rules.js';
 import QuestionManager from './screens/question-manager.js';
 import Stats from './screens/stats.js';
 
-import {QuestionScreens} from './data/data.js';
-import {makeScreenActive} from './util.js';
 
+import {makeScreenActive} from './util.js';
+import {QuestionScreens} from './data/data.js';
+
+let data = QuestionScreens;
 
 export default class Application {
 
   static start() {
-    this.game = new GameModel();
+
   }
 
   static showIntro() {
@@ -32,7 +34,7 @@ export default class Application {
   }
 
   static showGame() {
-    const newGame = new QuestionManager(QuestionScreens);
+    const newGame = new QuestionManager(new GameModel(data));
     newGame.start();
   }
 

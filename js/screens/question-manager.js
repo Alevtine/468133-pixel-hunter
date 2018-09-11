@@ -1,7 +1,6 @@
 import GuessForEach from '../view/guess-for-each-view.js';
 import GuessForOne from '../view/guess-for-one-view.js';
 import FindImgOrPhoto from '../view/find-img-or-photo-view.js';
-import {beginState} from '../data/data.js';
 import {makeScreenActive} from '../util.js';
 
 import {TIME_PARAMETRES, TIMER_SEC, Answer, calculateLives} from '../data/game-data.js';
@@ -27,21 +26,22 @@ const questionKindMap = {
 };
 
 export default class QuestionManager {
-  constructor(questionsData) {
-    this._questionsData = questionsData;
+  constructor(model) {
+
+    this.model = model;
+    this._questionsData = this.model.data;
     this.snip = 0;
   }
 
   start() {
     const questionData = this._questionsData[0];
-    this.currentState = Object.assign({}, beginState);
     this.showQuestion(questionData, 1);
   }
 
   showQuestion(questionData, nextQuestionNumber) {
     const {View, validator} = questionKindMap[questionData.kind];
-    const questionView = new View(questionData, this.currentState);
-    const header = new HeaderView(this.currentState);
+    const questionView = new View(questionData, this.model.game);
+    const header = new HeaderView(this.model.game);
     this.node = document.createElement(`div`);
     this.node.appendChild(header.element);
     this.node.appendChild(questionView.element);
@@ -62,23 +62,24 @@ export default class QuestionManager {
       throw new Error(`question number should be positive`);
     }
     if (questionNumber >= this._questionsData.length) {
-      Application.showStats(this.currentState);
-    } else if (this.currentState.lives <= 0) {
-      Application.showStats(this.currentState);
+      Application.showStats(this.model.game);
+    } else if (this.model.game.lives <= 0) {
+      this.model.game.time = TIMER_SEC.limit;
+      Application.showStats(this.model.game);
     } else {
       this.stopTimer();
-      this.currentState.time = TIMER_SEC.limit;
+      this.model.game.time = TIMER_SEC.limit;
       this.showQuestion(this._questionsData[questionNumber], questionNumber + 1);
     }
-    this.currentState.level += 1;
+    this.model.game.level += 1;
   }
 
   handleAnswer(isCorrect) {
     if (isCorrect) {
-      this.checkTypeAnswer(this.currentState.time);
+      this.checkTypeAnswer(this.model.game.time);
     } else {
-      this.currentState.lives = calculateLives(this.currentState.lives, isCorrect);
-      this.currentState.answers.splice(this.currentState.level - 1, 1, Answer.wrong);
+      this.model.game.lives = calculateLives(this.model.game.lives, isCorrect);
+      this.model.game.answers.splice(this.model.game.level - 1, 1, Answer.wrong);
     }
   }
 
@@ -92,18 +93,18 @@ export default class QuestionManager {
     } else if (this.time < TIME_PARAMETRES.fast) {
       answerType = Answer.slow;
     }
-    this.currentState.answers.splice(this.currentState.level - 1, 1, answerType);
+    this.model.game.answers.splice(this.model.game.level - 1, 1, answerType);
   }
 
   startTimer() {
     this.snip = setInterval(() => {
-      this.currentState.time--;
-      if (this.currentState.time <= 0) {
+      this.model.game.time--;
+      if (this.model.game.time <= 0) {
         this.stopTimer();
-        this.currentState.answers.splice(this.currentState.level - 1, 1, Answer.wrong);
-        this.currentState.lives = calculateLives(this.currentState.lives, false);
+        this.model.game.answers.splice(this.model.game.level - 1, 1, Answer.wrong);
+        this.model.game.lives = calculateLives(this.model.game.lives, false);
       }
-      const header = new HeaderView(this.currentState);
+      const header = new HeaderView(this.model.game);
       this.node.replaceChild(header.element, this.node.children[0]);
     }, TIMER_SEC.tick);
   }
@@ -113,10 +114,10 @@ export default class QuestionManager {
   }
 
   checkIfDead() {
-    if (this.currentState.lives > 0) {
-      this.currentState.isWin = true;
+    if (this.model.game.lives > 0) {
+      this.model.game.isWin = true;
     } else {
-      this.currentState.isWin = false;
+      this.model.game.isWin = false;
     }
   }
 

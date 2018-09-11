@@ -1,31 +1,23 @@
-// import константы
+import {beginState} from './data/data.js';
+import {TIMER_SEC} from './data/game-data.js';
 
 export default class GameModel {
   constructor(data) {
     this.data = data;
-    this.resetPlay();
-  }
-
-  get currentState() {
-    return this.currentState;
-  }
-
-  resetPlay() {
-    this.currentState = {
-      level: 1,
-      lives: 3,
-      time: 30,
-      answers: [],
-      isWin: false
-    };
+    this.game = Object.assign({}, beginState);
   }
 
   tick() {
-    this.currentState.time--;
+    this.game.time--;
   }
 
   resetTime() {
-    this.currentState.time = 30;
+    this.game.time = TIMER_SEC.limit;
   }
+
+  isWin() {
+    this.game.win = true;
+  }
+
 
 }
