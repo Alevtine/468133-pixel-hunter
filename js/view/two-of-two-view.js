@@ -2,37 +2,37 @@ import {resize} from '../util.js';
 import statsResult from './stats-result-view.js';
 import AbstractView from '../abstract-view.js';
 
-export default class GuessForEach extends AbstractView {
+export default class TwoOfTwoView extends AbstractView {
 
-  constructor(questionData, currentState) {
+  constructor(gameModel) {
     super();
-    if (questionData.kind !== `guessForEach`) {
+    this.gameModel = gameModel;
+    this.questionData = gameModel.questionData();
+    if (this.questionData.type !== `two-of-two`) {
       throw new Error(`incorrect screen kind`);
     }
-    this.questionData = questionData;
-    this.currentState = currentState;
   }
 
   get template() {
     return `
       <section class="game">
-        <p class="game__task">${this.questionData.title}</p>
+        <p class="game__task">${this.questionData.question}</p>
     <form class="game__content">
   ${this.questionData.answers.map((answer, i) =>
     `<div class="game__option">
-        <img src="${answer.pictureURL}" alt="Option ${i + 1}">
+        <img src="${answer.image.url}" alt="Option ${i + 1}">
         <label class="game__answer game__answer--photo">
           <input class="visually-hidden" name="question${i + 1}" type="radio" value="photo">
           <span>Фото</span>
         </label>
         <label class="game__answer game__answer--paint">
-          <input class="visually-hidden" name="question${i + 1}" type="radio" value="paint">
+          <input class="visually-hidden" name="question${i + 1}" type="radio" value="painting">
           <span>Рисунок</span>
         </label>
       </div>`).join(``)}
     </form>
         <ul class="stats">
-  ${statsResult(this.currentState.answers)}
+  ${statsResult(this.gameModel.game, this.gameModel.player, this.gameModel.answers)}
         </ul>
       </section>`;
   }

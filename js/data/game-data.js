@@ -5,13 +5,6 @@ export const TIMER_SEC = {
   tick: 1000
 };
 
-export const TIME_PARAMETRES = {
-  fast: 10,
-  correct: 20,
-  slow: 30,
-  wrong: -1
-};
-
 export const Point = {
   correct: 100,
   slow: -50,
@@ -32,6 +25,15 @@ const levels = {
   max: 10
 };
 
+export const answerType = (timeLeft) => {
+  if (timeLeft > 20) {
+    return Answer.fast;
+  }
+  if (timeLeft > 10) {
+    return Answer.correct;
+  }
+  return Answer.slow;
+};
 
 export const turnLevel = (level) => {
   level = Math.min(levels.max, Math.max(levels.min, level));
@@ -41,7 +43,6 @@ export const turnLevel = (level) => {
 export const calculateLives = (current, answer) => {
   return current - !answer;
 };
-
 
 export const getScore = (answersArr, lives) => {
   if (answersArr.length < ANSWERS_QTTY || lives > LIVES_QTTY || lives <= 0) {

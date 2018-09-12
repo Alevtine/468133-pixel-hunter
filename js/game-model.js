@@ -1,23 +1,89 @@
-import {beginState} from './data/data.js';
 import {TIMER_SEC} from './data/game-data.js';
 
 export default class GameModel {
   constructor(data) {
     this.data = data;
-    this.game = Object.assign({}, beginState);
+    this.allAnswers = [];
+    this.allLives = [];
+    this.allPlayers = [];
+    this.game = 0;
+    this.player = ``;
+  }
+
+  newGame() {
+    this.game++;
+    this.level = 0;
+    this.lives = 3;
+    this.timeLeft = TIMER_SEC.limit;
+    this.answers = Array(this.data.length).fill(`unknown`);
+  }
+
+  endGame() {
+    this.allAnswers.push(this.answers);
+    this.allLives.push(this.lives);
+    this.allPlayers.push(this.player);
+  }
+
+  checkStarted() {
+    if (this.level === 0) {
+      throw new Error(`game has not started yet`);
+    }
+  }
+
+  checkAlive() {
+    if (!this.isAlive()) {
+      throw new Error(`player is not alive`);
+    }
+  }
+
+  questionData() {
+    this.checkStarted();
+    return this.data[this.level - 1];
+  }
+
+  setAnswerType(answerType) {
+    this.checkStarted();
+    this.answers[this.level - 1] = answerType;
+  }
+
+  nextLevel() {
+    if (this.level === this.data.length) {
+      throw new Error(`there is no next level`);
+    }
+    this.level++;
+  }
+
+  takeLife() {
+    this.checkStarted();
+    this.checkAlive();
+    this.lives--;
   }
 
   tick() {
-    this.game.time--;
+    if (this.isTimeOut()) {
+      throw new Error(`time is out`);
+    }
+    this.timeLeft--;
   }
 
   resetTime() {
-    this.game.time = TIMER_SEC.limit;
+    this.timeLeft = TIMER_SEC.limit;
   }
 
-  isWin() {
-    this.game.win = true;
+  isAlive() {
+    return this.lives > 0;
   }
 
+  isLast() {
+    return this.level === this.data.length;
+  }
+
+  isTimeOut() {
+    return this.timeLeft === 0;
+  }
+
+  isStarted() {
+    return this.level > 0;
+  }
 
 }

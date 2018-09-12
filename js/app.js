@@ -15,7 +15,8 @@ let data = QuestionScreens;
 export default class Application {
 
   static start() {
-
+    this.gameModel = new GameModel(data);
+    this.showIntro();
   }
 
   static showIntro() {
@@ -29,17 +30,17 @@ export default class Application {
   }
 
   static showRules() {
-    const rules = new Rules();
+    const rules = new Rules(this.gameModel);
     makeScreenActive(rules);
   }
 
   static showGame() {
-    const newGame = new QuestionManager(new GameModel(data));
-    newGame.start();
+    this.gameModel.newGame();
+    new QuestionManager(this.gameModel).start();
   }
 
-  static showStats(currentState) {
-    const stats = new Stats(currentState);
+  static showStats(gameModel) {
+    const stats = new Stats(gameModel);
     makeScreenActive(stats);
   }
 

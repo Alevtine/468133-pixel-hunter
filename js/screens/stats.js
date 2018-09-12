@@ -3,10 +3,10 @@ import HeaderView from '../view/header-view.js';
 import Application from '../app.js';
 
 export default class Stats {
-  constructor(finalState) {
+  constructor(gameModel) {
 
-    const header = new HeaderView(finalState);
-    const stats = new StatsView(finalState);
+    const header = new HeaderView(gameModel);
+    const stats = new StatsView(gameModel);
     const node = document.createElement(`div`);
     node.appendChild(header.element);
     node.appendChild(stats.element);

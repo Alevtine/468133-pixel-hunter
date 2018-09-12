@@ -4,39 +4,41 @@ import statsResult from './stats-result-view.js';
 
 
 export default class StatsView extends AbstractView {
-  constructor(finalState) {
+  constructor(gameModel) {
     super();
-    this.finalState = finalState;
-    this.title = this.finalState.isWin ? `Победа!` : `Проигрыш`;
+    this.gameModel = gameModel;
+    this.title = this.gameModel.isAlive() ? `Победа!` : `Проигрыш`;
   }
 
   get template() {
+    let node = [];
+    for (let i = 0; i < this.gameModel.allAnswers.length; i++) {
+      let answers = this.gameModel.allAnswers[i];
+      let lives = this.gameModel.allLives[i];
+      let player = this.gameModel.allPlayers[i];
+      node.push(lives > 0 ? this.templateWin(i + 1, player, answers, lives) : this.templateFail(i + 1, player, answers));
+    }
     return `
   <section class="result">
     <h2 class="result__title">${this.title}</h2>
-  ${this.finalState.isWin ? this.templateWin() : this.templateFail()}
+    ${node.join(``)}
   </section>
   `;
   }
 
-  templateWin() {
-    const interimResult = this.finalState.answers.filter((answer) => answer !== `unknown` && answer !== `wrong`).length;
+  templateWin(game, player, answers, lives) {
+    const interimResult = answers.filter((answer) => answer !== `unknown` && answer !== `wrong`).length;
     const interimPoints = interimResult * Point.correct;
-    const totalPoints = getScore(this.finalState.answers, this.finalState.lives);
+    const totalPoints = getScore(answers, lives);
     return `
   <table class="result__table">
     <tr>
-      <td class="result__number">1.</td>
-      <td colspan="2">
-        <ul class="stats">
-${statsResult(this.finalState.answers)}
-        </ul>
-      </td>
+      ${statsResult(game, player, answers)}
       <td class="result__points">× 100</td>
       <td class="result__total">${interimPoints}</td>
-      ${this.templateLivesPoints()}
-      ${this.templateFastPoints()}
-      ${this.templateSlowPoints()}
+      ${this.templateLivesPoints(lives)}
+      ${this.templateFastPoints(answers)}
+      ${this.templateSlowPoints(answers)}
     </tr>
     <tr>
       <td colspan="5" class="result__total  result__total--final">${totalPoints}</td>
@@ -44,16 +46,11 @@ ${statsResult(this.finalState.answers)}
     </table>`;
   }
 
-  templateFail() {
+  templateFail(game, player, answers) {
     return `
       <table class="result__table">
         <tr>
-          <td class="result__number">2.</td>
-          <td>
-            <ul class="stats">
-${statsResult(this.finalState.answers)}
-            </ul>
-          </td>
+          ${statsResult(game, player, answers)}
           <td class="result__total"></td>
           <td class="result__total  result__total--final">fail</td>
         </tr>
@@ -61,11 +58,10 @@ ${statsResult(this.finalState.answers)}
   }
 
 
-  templateLivesPoints() {
-    const livesLeft = Math.max(0, this.finalState.lives);
+  templateLivesPoints(lives) {
+    const livesLeft = lives;
     const points = livesLeft * Point.bonus;
-    if (this.finalState.isWin && livesLeft) {
-      return `
+    return `
 <tr>
   <td></td>
   <td class="result__extra">Бонус за жизни:</td>
@@ -74,16 +70,15 @@ ${statsResult(this.finalState.answers)}
   <td class="result__points">× 50</td>
   <td class="result__total">${points}</td>
 </tr>`;
-    } else {
-      return ``;
-    }
   }
 
-  templateFastPoints() {
-    const fastAnswers = this.finalState.answers.filter((it) => it === `fast`).length;
+  templateFastPoints(answers) {
+    const fastAnswers = answers.filter((it) => it === `fast`).length;
     const points = fastAnswers * Point.fast;
-    if (this.finalState.isWin && fastAnswers) {
-      return `
+    if (!fastAnswers) {
+      return ``;
+    }
+    return `
 <tr>
   <td></td>
   <td class="result__extra">Бонус за скорость:</td>
@@ -91,16 +86,15 @@ ${statsResult(this.finalState.answers)}
   <td class="result__points">× 50</td>
   <td class="result__total">${points}</td>
 </tr>`;
-    } else {
-      return ``;
-    }
   }
 
-  templateSlowPoints() {
-    const slowAnswers = this.finalState.answers.filter((it) => it === `slow`).length;
+  templateSlowPoints(answers) {
+    const slowAnswers = answers.filter((it) => it === `slow`).length;
     const points = slowAnswers * Point.slow;
-    if (this.finalState.isWin && slowAnswers) {
-      return `
+    if (!slowAnswers) {
+      return ``;
+    }
+    return `
 <tr>
   <td></td>
   <td class="result__extra">Штраф за медлительность:</td>
@@ -108,10 +102,5 @@ ${statsResult(this.finalState.answers)}
   <td class="result__points">× 50</td>
   <td class="result__total">${points}</td>
 </tr>`;
-    } else {
-      return ``;
-    }
   }
-
-
 }
