@@ -1,15 +1,18 @@
 export const ANSWERS_QTTY = 10;
 export const LIVES_QTTY = 3;
-const TIMER_SEC = 30;
-
-export const Point = {
-  correct: 100, // Правильный ответ: === 100 очков;
-  slow: -50, // Медленный ответ: снимается 50 очков; === 50
-  fast: 50, // Быстрый ответ: добавляется 50 очков; === 150
-  bonus: 50 // За жизнь
+export const TIMER_SEC = {
+  limit: 30,
+  tick: 1000
 };
 
-const Answer = {
+export const Point = {
+  correct: 100,
+  slow: -50,
+  fast: 50,
+  bonus: 50
+};
+
+export const Answer = {
   slow: `slow`,
   fast: `fast`,
   correct: `correct`,
@@ -22,6 +25,15 @@ const levels = {
   max: 10
 };
 
+export const answerType = (timeLeft) => {
+  if (timeLeft > 20) {
+    return Answer.fast;
+  }
+  if (timeLeft > 10) {
+    return Answer.correct;
+  }
+  return Answer.slow;
+};
 
 export const turnLevel = (level) => {
   level = Math.min(levels.max, Math.max(levels.min, level));
@@ -32,14 +44,13 @@ export const calculateLives = (current, answer) => {
   return current - !answer;
 };
 
-
 export const getScore = (answersArr, lives) => {
   if (answersArr.length < ANSWERS_QTTY || lives > LIVES_QTTY || lives <= 0) {
     return -1;
   } else {
     let scores = lives * Point.bonus;
-    answersArr.forEach((it) => {
-      switch (it) {
+    answersArr.forEach((answer) => {
+      switch (answer) {
         case Answer.slow:
           scores += Point.correct + Point.slow;
           break;
@@ -49,6 +60,8 @@ export const getScore = (answersArr, lives) => {
         case Answer.correct:
           scores += Point.correct;
           break;
+        default:
+          break;
       }
     });
     return scores;
@@ -56,7 +69,7 @@ export const getScore = (answersArr, lives) => {
 };
 
 export const startTimer = (value) => {
-  if (value > 0 && value <= TIMER_SEC) {
+  if (value > 0 && value <= TIMER_SEC.limit) {
     value--;
   } else if (value <= 0) {
     return `Time is out`;

@@ -1,18 +1,18 @@
-import {makeScreenActive} from '../util.js';
-import insertGuessForEach from './guessForEach.js';
-import insertGreeting from './greeting.js';
 import RulesView from '../view/rules-view.js';
+import HeaderView from '../view/header-view.js';
+import Application from '../app.js';
 
-export default () => {
-  const rules = new RulesView();
+export default class Rules {
+  constructor(gameModel) {
+    this.header = new HeaderView();
+    this.rules = new RulesView(gameModel);
+    const node = document.createElement(`div`);
+    node.appendChild(this.header.element);
+    node.appendChild(this.rules.element);
 
-  rules.onClickNext = () => {
-    makeScreenActive(insertGuessForEach());
-  };
+    this.rules.onClickNext = () => Application.showGame();
+    this.header.onClickBack = () => Application.showGreeting();
 
-  rules.onClickBack = () => {
-    makeScreenActive(insertGreeting());
-  };
-
-  return rules.element;
-};
+    return node;
+  }
+}
