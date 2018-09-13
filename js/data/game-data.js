@@ -1,3 +1,6 @@
+export const SERVER_URL_GET = `https://es.dump.academy/pixel-hunter/questions`;
+
+export const SUCCESS_STATUS = 200;
 export const ANSWERS_QTTY = 10;
 export const LIVES_QTTY = 3;
 export const TIMER_SEC = {
