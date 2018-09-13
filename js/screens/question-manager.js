@@ -80,6 +80,7 @@ export default class QuestionManager {
         this.stopTimer();
         this.gameModel.setAnswerType(Answer.wrong);
         this.gameModel.takeLife();
+        this.nextQuestion();
       }
       const header = new HeaderView(this.gameModel);
       this.node.replaceChild(header.element, this.node.children[0]);

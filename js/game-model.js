@@ -1,4 +1,4 @@
-import {TIMER_SEC} from './data/game-data.js';
+import {TIMER_SEC, LIVES_QTTY} from './data/game-data.js';
 
 export default class GameModel {
   constructor(data) {
@@ -13,7 +13,7 @@ export default class GameModel {
   newGame() {
     this.game++;
     this.level = 0;
-    this.lives = 3;
+    this.lives = LIVES_QTTY;
     this.timeLeft = TIMER_SEC.limit;
     this.answers = Array(this.data.length).fill(`unknown`);
   }
