@@ -1,7 +1,7 @@
-import {SERVER_URL_GET, SUCCESS_STATUS} from './game-data.js';
+import {SERVER_QUESTIONS, SUCCESS_STATUS, SERVER_STATS, UNKNOWN_PLAYER} from './game-data.js';
 
 
-const checkPromiseStatus = (response) => {
+const checkStatus = (response) => {
   if (response.status === SUCCESS_STATUS) {
     return response;
   }
@@ -15,15 +15,15 @@ const getURLs = (data) => {
   return urls;
 };
 
-const convertJSON = function (response) {
-  return response.json();
-};
+// const convertJSON = function (response) {
+//   return response.json();
+// };
 
 export default class Loader {
   static async loadData() {
-    const response = await fetch(SERVER_URL_GET);
-    checkPromiseStatus(response);
-    return await convertJSON(response);
+    const response = await fetch(SERVER_QUESTIONS);
+    checkStatus(response);
+    return response.json();
   }
 
   static loadImage(url) {
@@ -39,5 +39,24 @@ export default class Loader {
     const urls = getURLs(data);
     const promises = urls.map((url) => this.loadImage(url));
     return Promise.all(promises);
+  }
+
+  static async saveResult(data, name = UNKNOWN_PLAYER) {
+    const convertRequest = {
+      headers: {
+        'Content-Type': `application/json`
+      },
+      method: `POST`,
+      body: JSON.stringify(data)
+    };
+    const response = await fetch(`${SERVER_STATS}-${name}`, convertRequest);
+    return checkStatus(response);
+  }
+
+  static async loadResults(name = UNKNOWN_PLAYER) {
+
+    const response = await fetch(`${SERVER_STATS}-${name}`);
+    checkStatus(response);
+    return response.json();
   }
 }

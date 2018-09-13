@@ -63,7 +63,6 @@ export default class QuestionManager {
   nextQuestion() {
     this.stopTimer();
     if (!this.gameModel.isAlive() || this.gameModel.isLast()) {
-      this.gameModel.endGame();
       Application.showStats(this.gameModel);
     } else {
       this.gameModel.resetTime();
