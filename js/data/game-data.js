@@ -1,5 +1,6 @@
-export const SERVER_URL_GET = `https://es.dump.academy/pixel-hunter/questions`;
-
+export const SERVER_QUESTIONS = `https://es.dump.academy/pixel-hunter/questions`;
+export const SERVER_STATS = `https://es.dump.academy/pixel-hunter/stats/468133`;
+export const UNKNOWN_PLAYER = `unknown`;
 export const SUCCESS_STATUS = 200;
 export const ANSWERS_QTTY = 10;
 export const LIVES_QTTY = 3;

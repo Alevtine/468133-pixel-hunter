@@ -4,20 +4,20 @@ import statsResult from './stats-result-view.js';
 
 
 export default class StatsView extends AbstractView {
-  constructor(gameModel) {
+  constructor(gameModel, results) {
     super();
     this.gameModel = gameModel;
+    this.results = results;
     this.title = this.gameModel.isAlive() ? `Победа!` : `Проигрыш`;
   }
 
   get template() {
     let node = [];
-    for (let i = 0; i < this.gameModel.allAnswers.length; i++) {
-      let answers = this.gameModel.allAnswers[i];
-      let lives = this.gameModel.allLives[i];
-      let player = this.gameModel.allPlayers[i];
-      node.push(lives > 0 ? this.templateWin(i + 1, player, answers, lives) : this.templateFail(i + 1, player, answers));
-    }
+    this.results.forEach((result, i) => {
+      node.push(result.lives > 0 ? this.templateWin(result, i + 1)
+        : this.templateFail(result, i + 1));
+    });
+
     return `
   <section class="result">
     <h2 class="result__title">${this.title}</h2>
@@ -26,19 +26,19 @@ export default class StatsView extends AbstractView {
   `;
   }
 
-  templateWin(game, player, answers, lives) {
-    const interimResult = answers.filter((answer) => answer !== `unknown` && answer !== `wrong`).length;
+  templateWin(result, game) {
+    const interimResult = result.answers.filter((answer) => answer !== `unknown` && answer !== `wrong`).length;
     const interimPoints = interimResult * Point.correct;
-    const totalPoints = getScore(answers, lives);
+    const totalPoints = getScore(result.answers, result.lives);
     return `
   <table class="result__table">
     <tr>
-      ${statsResult(game, player, answers)}
+      ${statsResult(game, result.player, result.answers)}
       <td class="result__points">× 100</td>
       <td class="result__total">${interimPoints}</td>
-      ${this.templateLivesPoints(lives)}
-      ${this.templateFastPoints(answers)}
-      ${this.templateSlowPoints(answers)}
+      ${this.templateLivesPoints(result.lives)}
+      ${this.templateFastPoints(result.answers)}
+      ${this.templateSlowPoints(result.answers)}
     </tr>
     <tr>
       <td colspan="5" class="result__total  result__total--final">${totalPoints}</td>
@@ -46,11 +46,11 @@ export default class StatsView extends AbstractView {
     </table>`;
   }
 
-  templateFail(game, player, answers) {
+  templateFail(result, game) {
     return `
       <table class="result__table">
         <tr>
-          ${statsResult(game, player, answers)}
+          ${statsResult(game, result.player, result.answers)}
           <td class="result__total"></td>
           <td class="result__total  result__total--final">fail</td>
         </tr>

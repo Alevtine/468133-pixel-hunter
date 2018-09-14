@@ -1,6 +1,7 @@
 import TwoOfTwoView from '../view/two-of-two-view.js';
 import TinderLikeView from '../view/tinder-like-view.js';
 import OneOfThreeView from '../view/one-of-three-view.js';
+import ExitWindowView from '../view/exit-confirm-view.js';
 import {makeScreenActive} from '../util.js';
 
 import {TIMER_SEC, Answer, answerType} from '../data/game-data.js';
@@ -56,14 +57,13 @@ export default class QuestionManager {
       this.nextQuestion();
     };
 
-    header.onClickBack = () => Application.showGreeting();
+    header.onClickBack = () => this.showExitWindow();
     makeScreenActive(this.node);
   }
 
   nextQuestion() {
     this.stopTimer();
     if (!this.gameModel.isAlive() || this.gameModel.isLast()) {
-      this.gameModel.endGame();
       Application.showStats(this.gameModel);
     } else {
       this.gameModel.resetTime();
@@ -84,12 +84,23 @@ export default class QuestionManager {
       }
       const header = new HeaderView(this.gameModel);
       this.node.replaceChild(header.element, this.node.children[0]);
-      header.onClickBack = () => Application.showGreeting();
+      header.onClickBack = () => this.showExitWindow();
     }, TIMER_SEC.tick);
   }
 
   stopTimer() {
     clearInterval(this.timer);
+  }
+
+  showExitWindow() {
+    this.stopTimer();
+    const exitWindow = new ExitWindowView();
+    this.node.appendChild(exitWindow.element);
+    exitWindow.onClickOK = () => Application.showGreeting();
+    exitWindow.onClickCancel = () => {
+      this.node.removeChild(this.node.children[2]);
+      this.startTimer();
+    };
   }
 
 }

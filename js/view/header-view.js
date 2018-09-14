@@ -36,9 +36,13 @@ export default class HeaderView extends AbstractView {
 
   bind() {
     const backButton = this.element.querySelector(`button.back`);
+    const timer = this.element.querySelector(`.game__timer`);
     backButton.addEventListener(`click`, () => {
       this.onClickBack();
     });
+    if (this.gameModel && this.gameModel.timeLeft <= 5 && this.gameModel.isAlive()) {
+      timer.classList.add(`blink`);
+    }
   }
 
   onClickBack() {}

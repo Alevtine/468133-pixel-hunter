@@ -1,13 +1,10 @@
-import {TIMER_SEC, LIVES_QTTY} from './data/game-data.js';
+import {TIMER_SEC, LIVES_QTTY, UNKNOWN_PLAYER} from './data/game-data.js';
 
 export default class GameModel {
-  constructor(data) {
+  constructor(data, player = UNKNOWN_PLAYER) {
     this.data = data;
-    this.allAnswers = [];
-    this.allLives = [];
-    this.allPlayers = [];
     this.game = 0;
-    this.player = ``;
+    this.player = player;
   }
 
   newGame() {
@@ -16,12 +13,6 @@ export default class GameModel {
     this.lives = LIVES_QTTY;
     this.timeLeft = TIMER_SEC.limit;
     this.answers = Array(this.data.length).fill(`unknown`);
-  }
-
-  endGame() {
-    this.allAnswers.push(this.answers);
-    this.allLives.push(this.lives);
-    this.allPlayers.push(this.player);
   }
 
   checkStarted() {

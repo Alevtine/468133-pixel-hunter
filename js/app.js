@@ -45,9 +45,22 @@ export default class Application {
     new QuestionManager(this.gameModel).start();
   }
 
-  static showStats(gameModel) {
-    const stats = new Stats(gameModel);
-    makeScreenActive(stats);
+  static async showStats(gameModel) {
+
+    const playerName = gameModel.player;
+    const dataToPOST = {
+      'answers': gameModel.answers,
+      'lives': gameModel.lives,
+      'player': playerName
+    };
+    try {
+      await Loader.saveResult(dataToPOST, playerName);
+      const results = await Loader.loadResults(playerName);
+      const stats = new Stats(gameModel, results);
+      makeScreenActive(stats);
+    } catch (err) {
+      this.showError(err);
+    }
   }
 
   static showError(err) {
