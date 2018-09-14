@@ -1,7 +1,7 @@
-import {TIMER_SEC, LIVES_QTTY, UNKNOWN_PLAYER} from './data/game-data.js';
+import {TIMER_SEC, LIVES_QTTY} from './data/game-data.js';
 
 export default class GameModel {
-  constructor(data, player = UNKNOWN_PLAYER) {
+  constructor(data, player = ``) {
     this.data = data;
     this.game = 0;
     this.player = player;

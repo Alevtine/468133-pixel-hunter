@@ -29,7 +29,7 @@ const questionKindMap = {
 export default class QuestionManager {
   constructor(gameModel) {
     this.gameModel = gameModel;
-    this.timer = null;
+    this._timer = null;
   }
 
   start() {
@@ -74,7 +74,7 @@ export default class QuestionManager {
 
   startTimer() {
     this.stopTimer();
-    this.timer = setInterval(() => {
+    this._timer = setInterval(() => {
       this.gameModel.tick();
       if (this.gameModel.isTimeOut()) {
         this.stopTimer();
@@ -89,7 +89,7 @@ export default class QuestionManager {
   }
 
   stopTimer() {
-    clearInterval(this.timer);
+    clearInterval(this._timer);
   }
 
   showExitWindow() {

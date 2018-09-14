@@ -1,4 +1,5 @@
 import AbstractView from '../abstract-view.js';
+import {BLINK_TIME} from '../data/game-data.js';
 
 export default class HeaderView extends AbstractView {
   constructor(gameModel = null) {
@@ -40,7 +41,7 @@ export default class HeaderView extends AbstractView {
     backButton.addEventListener(`click`, () => {
       this.onClickBack();
     });
-    if (this.gameModel && this.gameModel.timeLeft <= 5 && this.gameModel.isAlive()) {
+    if (this.gameModel && this.gameModel.timeLeft <= BLINK_TIME && this.gameModel.isAlive()) {
       timer.classList.add(`blink`);
     }
   }

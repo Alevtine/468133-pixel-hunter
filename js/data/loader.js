@@ -1,4 +1,4 @@
-import {SERVER_QUESTIONS, SUCCESS_STATUS, SERVER_STATS, UNKNOWN_PLAYER} from './game-data.js';
+import {SERVER_QUESTIONS, SUCCESS_STATUS, SERVER_STATS} from './game-data.js';
 
 
 const checkStatus = (response) => {
@@ -14,10 +14,6 @@ const getURLs = (data) => {
   answers.forEach((answer) => answer.forEach((item) => urls.push(item.image.url)));
   return urls;
 };
-
-// const convertJSON = function (response) {
-//   return response.json();
-// };
 
 export default class Loader {
   static async loadData() {
@@ -41,7 +37,7 @@ export default class Loader {
     return Promise.all(promises);
   }
 
-  static async saveResult(data, name = UNKNOWN_PLAYER) {
+  static async saveResult(data, name) {
     const convertRequest = {
       headers: {
         'Content-Type': `application/json`
@@ -53,7 +49,7 @@ export default class Loader {
     return checkStatus(response);
   }
 
-  static async loadResults(name = UNKNOWN_PLAYER) {
+  static async loadResults(name) {
 
     const response = await fetch(`${SERVER_STATS}-${name}`);
     checkStatus(response);
