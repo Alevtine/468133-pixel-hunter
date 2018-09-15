@@ -1,7 +1,7 @@
 export function getFromTemplate(string) {
-  const template = document.createElement(`template`);
-  template.innerHTML = string;
-  return template.content;
+  const element = document.createElement(`div`);
+  element.innerHTML = string;
+  return element;
 }
 
 export function makeScreenActive(screen) {
