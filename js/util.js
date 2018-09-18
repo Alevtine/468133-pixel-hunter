@@ -23,5 +23,4 @@ export function resize(pic) {
   }
 
   return pic;
-
 }

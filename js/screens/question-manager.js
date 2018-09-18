@@ -4,7 +4,7 @@ import OneOfThreeView from '../view/one-of-three-view.js';
 import ExitWindowView from '../view/exit-confirm-view.js';
 import {makeScreenActive} from '../util.js';
 
-import {TIMER_SEC, Answer, answerType} from '../data/game-data.js';
+import {TimerSec, Answer, answerType} from '../data/game-data.js';
 import HeaderView from '../view/header-view.js';
 import Application from '../app.js';
 
@@ -52,7 +52,7 @@ export default class QuestionManager {
         this.gameModel.setAnswerType(answerType(this.gameModel.timeLeft));
       } else {
         this.gameModel.takeLife();
-        this.gameModel.setAnswerType(Answer.wrong);
+        this.gameModel.setAnswerType(Answer.WRONG);
       }
       this.nextQuestion();
     };
@@ -78,14 +78,14 @@ export default class QuestionManager {
       this.gameModel.tick();
       if (this.gameModel.isTimeOut()) {
         this.stopTimer();
-        this.gameModel.setAnswerType(Answer.wrong);
+        this.gameModel.setAnswerType(Answer.WRONG);
         this.gameModel.takeLife();
         this.nextQuestion();
       }
       const header = new HeaderView(this.gameModel);
       this.node.replaceChild(header.element, this.node.children[0]);
       header.onClickBack = () => this.showExitWindow();
-    }, TIMER_SEC.tick);
+    }, TimerSec.TICK);
   }
 
   stopTimer() {
