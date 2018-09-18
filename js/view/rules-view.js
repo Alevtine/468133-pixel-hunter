@@ -1,5 +1,8 @@
 import AbstractView from '../abstract-view.js';
 
+const checkUserInput = (string) => string.replace(/[^\d\sA-Zа-я]/gi, ``);
+const getUserName = (name) => checkUserInput(name) ? checkUserInput(name) : ``;
+
 export default class RulesView extends AbstractView {
 
   constructor(gameModel) {
@@ -8,10 +11,6 @@ export default class RulesView extends AbstractView {
   }
 
   get template() {
-    let value = ``;
-    if (this.gameModel.player !== ``) {
-      value = ` value="${this.gameModel.player}"`;
-    }
     return `
       <section class="rules">
         <h2 class="rules__title">Правила</h2>
@@ -25,7 +24,7 @@ export default class RulesView extends AbstractView {
         </ul>
         <p class="rules__ready">Готовы?</p>
         <form class="rules__form">
-          <input class="rules__input" type="text" placeholder="Ваше Имя"${value}>
+          <input class="rules__input" type="text" placeholder="Ваше Имя" maxlength="20">
           <button class="rules__button  continue" type="submit" disabled>Go!</button>
         </form>
       </section>
@@ -42,7 +41,7 @@ export default class RulesView extends AbstractView {
     });
 
     continueButton.addEventListener(`click`, () => {
-      this.gameModel.player = formInput.value.trim();
+      this.gameModel.player = getUserName(formInput.value);
       this.onClickNext();
     });
   }

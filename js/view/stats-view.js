@@ -1,5 +1,5 @@
 import AbstractView from '../abstract-view.js';
-import {getScore, Point} from '../data/game-data.js';
+import {getScore, Point, Title} from '../data/game-data.js';
 import statsResult from './stats-result-view.js';
 
 
@@ -8,13 +8,13 @@ export default class StatsView extends AbstractView {
     super();
     this.gameModel = gameModel;
     this.results = results;
-    this.title = this.gameModel.isAlive() ? `Победа!` : `Проигрыш`;
+    this.title = this.gameModel.isAlive() ? Title.WIN : Title.FAIL;
   }
 
   get template() {
     let node = [];
     this.results.forEach((result, i) => {
-      node.push(result.lives > 0 ? this.templateWin(result, i + 1)
+      node.unshift(result.lives > 0 ? this.templateWin(result, i + 1)
         : this.templateFail(result, i + 1));
     });
 
@@ -28,7 +28,7 @@ export default class StatsView extends AbstractView {
 
   templateWin(result, game) {
     const interimResult = result.answers.filter((answer) => answer !== `unknown` && answer !== `wrong`).length;
-    const interimPoints = interimResult * Point.correct;
+    const interimPoints = interimResult * Point.CORRECT;
     const totalPoints = getScore(result.answers, result.lives);
     return `
   <table class="result__table">
@@ -60,7 +60,7 @@ export default class StatsView extends AbstractView {
 
   templateLivesPoints(lives) {
     const livesLeft = lives;
-    const points = livesLeft * Point.bonus;
+    const points = livesLeft * Point.BONUS;
     return `
 <tr>
   <td></td>
@@ -74,7 +74,7 @@ export default class StatsView extends AbstractView {
 
   templateFastPoints(answers) {
     const fastAnswers = answers.filter((it) => it === `fast`).length;
-    const points = fastAnswers * Point.fast;
+    const points = fastAnswers * Point.FAST;
     if (!fastAnswers) {
       return ``;
     }
@@ -90,7 +90,7 @@ export default class StatsView extends AbstractView {
 
   templateSlowPoints(answers) {
     const slowAnswers = answers.filter((it) => it === `slow`).length;
-    const points = slowAnswers * Point.slow;
+    const points = slowAnswers * Point.SLOW;
     if (!slowAnswers) {
       return ``;
     }

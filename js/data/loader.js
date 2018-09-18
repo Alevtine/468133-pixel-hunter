@@ -1,5 +1,4 @@
-import {SERVER_QUESTIONS, SUCCESS_STATUS, SERVER_STATS} from './game-data.js';
-
+import {ServerURL, SUCCESS_STATUS} from './game-data.js';
 
 const checkStatus = (response) => {
   if (response.status === SUCCESS_STATUS) {
@@ -10,14 +9,15 @@ const checkStatus = (response) => {
 
 const getURLs = (data) => {
   const answers = data.map((item) => item.answers);
-  const urls = [];
+  let urls = [];
   answers.forEach((answer) => answer.forEach((item) => urls.push(item.image.url)));
-  return urls;
+  const uniqueUrls = new Set(urls);
+  return [...uniqueUrls];
 };
 
 export default class Loader {
   static async loadData() {
-    const response = await fetch(SERVER_QUESTIONS);
+    const response = await fetch(ServerURL.QUESTIONS);
     checkStatus(response);
     return response.json();
   }
@@ -45,13 +45,12 @@ export default class Loader {
       method: `POST`,
       body: JSON.stringify(data)
     };
-    const response = await fetch(`${SERVER_STATS}-${name}`, convertRequest);
+    const response = await fetch(`${ServerURL.STATS}-${name}`, convertRequest);
     return checkStatus(response);
   }
 
   static async loadResults(name) {
-
-    const response = await fetch(`${SERVER_STATS}-${name}`);
+    const response = await fetch(`${ServerURL.STATS}-${name}`);
     checkStatus(response);
     return response.json();
   }

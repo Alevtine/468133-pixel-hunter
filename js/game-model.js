@@ -1,7 +1,8 @@
-import {TIMER_SEC, LIVES_QTTY} from './data/game-data.js';
+import {TimerSec, LIVES_QUANTITY} from './data/game-data.js';
+
 
 export default class GameModel {
-  constructor(data, player = ``) {
+  constructor(data, player) {
     this.data = data;
     this.game = 0;
     this.player = player;
@@ -10,8 +11,8 @@ export default class GameModel {
   newGame() {
     this.game++;
     this.level = 0;
-    this.lives = LIVES_QTTY;
-    this.timeLeft = TIMER_SEC.limit;
+    this.lives = LIVES_QUANTITY;
+    this.timeLeft = TimerSec.LIMIT;
     this.answers = Array(this.data.length).fill(`unknown`);
   }
 
@@ -58,7 +59,7 @@ export default class GameModel {
   }
 
   resetTime() {
-    this.timeLeft = TIMER_SEC.limit;
+    this.timeLeft = TimerSec.LIMIT;
   }
 
   isAlive() {
